@@ -1,0 +1,13 @@
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.6); /* Makes arrows visible */
+  border-radius: 50%;
+  background-size: 100% 100%;
+}
+.carousel {
+  overflow: hidden;
+}
+body {
+    overflow-x: hidden;
+    max-width: 100%;
+}
