@@ -15,6 +15,7 @@ import './App.css';
 import Ask from './components/Ask';
 import SignIn from './components/signin';
 import Sidebar from './components/sidebar';
+import ExperimentView from './components/ExperimentView'
 
 
 function App() {
@@ -40,6 +41,9 @@ function App() {
         <Route path='stem-club' element={<Stemclub />} />
         {/* <Route path="*" element={<h1>404 - Page Not Found</h1>} /> */}
         <Route path="/upload-practical" element={<UploadPracticalForm />} />
+
+          <Route path="/ExperimentView" element={<ExperimentView />} />
+
         <Route path="/virtual-lab" element={<Sidebar />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/ask" element={<Ask />} />

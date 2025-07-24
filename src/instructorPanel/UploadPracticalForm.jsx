@@ -35,7 +35,7 @@ const UploadPracticalForm = () => {
   };
 
   return (
-    <Container className="py-4">
+    <Container className="py-4 mt-5 pt-5">
       <h2>Upload New Practical</h2>
       {success && <Alert variant="success">Practical uploaded successfully!</Alert>}
       <Form onSubmit={handleSubmit}>

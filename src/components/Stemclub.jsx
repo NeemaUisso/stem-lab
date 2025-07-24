@@ -22,7 +22,7 @@ export default function Stemclub() {
   const [groups, setGroups] = useState(sampleGroups);
 
   return (
-    <div className='container pt-5 mt-5'>
+    <div className='container-fluid pt-5 mt-5'>
       {/* Header */}
       <div style={{ backgroundColor: '#2596be', padding: '40px 20px', textAlign: 'center', marginTop: '40px'}}>
         <h1 style={{ color: '#003366' }}>Explore, join, or create your own STEM group. Let's innovate together!</h1>

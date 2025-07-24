@@ -21,7 +21,8 @@ function FAQ() {
   };
 
   return (
-    <div className="container  mt-5 pt-5 p-4 bg-light rounded shadow">
+    <div className="pt-5 mt-5">
+        <div className="container p-4 bg-light rounded shadow">
       <h2 className="text-center mb-4">Frequently Asked Questions</h2>
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
@@ -43,6 +44,7 @@ function FAQ() {
           <strong>Answer:</strong> {answer}
         </div>
       )}
+    </div>
     </div>
   );
 }

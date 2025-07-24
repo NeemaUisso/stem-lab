@@ -3,98 +3,90 @@ import { Link } from 'react-router-dom';
 import OAuth from '../components/OAuth';
 import Image from '../assets/stemImage.jpeg'
 
+import LoginImage from '../assets/stemImage.jpeg'; // replace with your image path
+
 export default function SignIn() {
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
 
-  const { email, password } = fogirmData; 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
 
-  function onChange(e) {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.id]: e.target.value,
-    }));
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+    // submit logic here
+  };
 
   return (
-    <section className="container mt-5 pt-5">
-      <h1 className="text-center text-darkblue fw-bold mb-4">Sign In</h1>
+    <div className="container py-5 mt-5">
       <div className="row justify-content-center align-items-center">
-        <div className="col-md-6 mb-4 mb-md-0">
-          <img
-            src={Image}
-            alt="key"
-            className="img-fluid rounded-3"
-          />
-        </div>
+        <div className="col-12 col-lg-10">
+          <div className="row bg-white shadow rounded-4 overflow-hidden">
 
-        <div className="col-md-6 col-lg-5">
-          <form>
-            <div className="mb-3">
-              <input
-                type="email"
-                id="email"
-                value={email}
-                onChange={onChange}
-                placeholder="Email address"
-                className="form-control form-control-lg"
+            {/* Image Section - on top for mobile, left for desktop */}
+            <div className="col-12 col-md-6 order-1 order-md-0 p-0">
+              <img
+                src={Image}
+                alt="Sign In"
+                className="img-fluid w-100 h-100"
+                style={{ objectFit: 'cover', minHeight: '300px' }}
               />
             </div>
 
-            <div className="mb-3 position-relative">
-              <input
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                value={password}
-                onChange={onChange}
-                placeholder="Password"
-                className="form-control form-control-lg"
-              />
-              <i
-                className={`bi ${showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'} position-absolute top-50 end-0 translate-middle-y me-3 fs-5`}
-                onClick={() => setShowPassword((prev) => !prev)}
-                style={{ cursor: 'pointer' }}
-              ></i>
+            {/* Form Section - below image on mobile */}
+            <div className="col-12 col-md-6 order-2 order-md-1 p-4 p-md-5">
+              <h2 className="text-center text-primary mb-4">Sign In</h2>
+
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="email" className="form-label">Email address</label>
+                  <input
+                    type="email"
+                    id="email"
+                    className="form-control form-control-lg"
+                    placeholder="Enter email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+
+                <div className="mb-3 position-relative">
+                  <label htmlFor="password" className="form-label">Password</label>
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    id="password"
+                    className="form-control form-control-lg"
+                    placeholder="Enter password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    required
+                  />
+                  <i
+                    className={`bi ${showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'} position-absolute top-50 end-0 translate-middle-y me-3 fs-5`}
+                    onClick={() => setShowPassword(prev => !prev)}
+                    style={{ cursor: 'pointer' }}
+                  ></i>
+                </div>
+
+                <div className="d-grid mb-3">
+                  <button type="submit" className="btn btn-primary btn-lg">
+                    Sign In
+                  </button>
+                </div>
+
+                <div className="d-flex justify-content-between small">
+                  <a href="/forgot-password" className="text-decoration-none">Forgot Password?</a>
+                  <a href="/sign-up" className="text-decoration-none text-danger">Register</a>
+                </div>
+              </form>
             </div>
 
-            <div className="d-flex justify-content-between mb-3">
-              <p className='text-darkblue'>
-                Don’t have an account?{' '}
-                <Link to="/sign-up" className="text-danger text-decoration-none">
-                  Register
-                </Link>
-              </p>
-              <p>
-                <Link
-                  to="/forgot-password"
-                  className="text-darkblue text-decoration-none"
-                >
-                  Forgot Password?
-                </Link>
-              </p>
-            </div>
-
-            <button
-              className="btn btn-primary w-100 py-2 fw-semibold text-uppercase "
-              type="submit"
-              style={{ backgroundColor: '#2596be' }}
-            >
-              Sign in
-            </button>
-
-            <div className="my-4 d-flex align-items-center">
-              <div className="flex-grow-1 border-top border-secondary"></div>
-              <span className="mx-3 fw-semibold text-darkblue">OR</span>
-              <div className="flex-grow-1 border-top border-secondary"></div>
-            </div>
-
-            <OAuth />
-          </form>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 }
