@@ -38,7 +38,7 @@ function AppNavbar() {
     borderRadius: '6px',
     textDecoration: 'none',
     display: 'inline-block',
-    backgroundColor: scrolled ?   'transparent' : 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: scrolled || isPageActive ?   'transparent' : 'rgba(255, 255, 255, 0.5)',
     transition: 'all 0.3s ease',
   };
 

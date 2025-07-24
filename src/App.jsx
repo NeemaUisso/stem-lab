@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import FAQ from './components/FAQ';
 import Stemclub from './components/Stemclub';
 import Footer from './components/Footer';
+import UploadPracticalForm from './instructorPanel/UploadPracticalForm'; 
 // import MainContent from './components/maincontent'; // Your content page
 
 import './App.css';
@@ -37,7 +38,7 @@ function App() {
         {/* Content page route */}
         <Route path='stem-club' element={<Stemclub />} />
         {/* <Route path="*" element={<h1>404 - Page Not Found</h1>} /> */}
-
+        <Route path="/upload-practical" element={<UploadPracticalForm />} />
         <Route path="/virtual-lab" element={<Sidebar />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/ask" element={<Ask />} />
