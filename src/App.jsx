@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Router, Routes, Route } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap-icons/font/bootstrap-icons.css';
@@ -14,6 +14,7 @@ import './App.css';
 import Ask from './components/Ask';
 import SignIn from './components/signin';
 import Sidebar from './components/sidebar';
+
 
 function App() {
   return (
@@ -42,6 +43,10 @@ function App() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/ask" element={<Ask />} />
         <Route path="/signin" element={<SignIn />} />
+
+        
+
+
       </Routes>
     </BrowserRouter>
   )

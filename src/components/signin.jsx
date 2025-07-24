@@ -10,7 +10,7 @@ export default function SignIn() {
     password: '',
   });
 
-  const { email, password } = formData;
+  const { email, password } = fogirmData; 
 
   function onChange(e) {
     setFormData((prevState) => ({

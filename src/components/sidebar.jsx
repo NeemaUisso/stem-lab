@@ -19,7 +19,7 @@ const Sidebar = ({ collapsed }) => {
       style={{
         width: '200px',
         height: '100vh',
-        backgroundColor: '#2600ffff',
+        backgroundColor: '#2596be',
         position: 'sticky',
         top: 0,
       }}
