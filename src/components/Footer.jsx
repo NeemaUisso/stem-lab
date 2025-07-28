@@ -2,7 +2,7 @@ import React from 'react';
 
 function Footer() {
   return (
-    <footer className="text-center text-lg-start text-white" style={{ backgroundColor: 'rgb(0, 0, 46)' }}>
+    <footer className="text-center text-lg-start text-white" style={{ backgroundColor: '#2596be' }}>
       <div className="container p-4 pb-0">
 
         {/* Section: Links */}

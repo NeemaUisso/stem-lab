@@ -17,6 +17,9 @@ import SignIn from './components/signin';
 import Sidebar from './components/sidebar';
 import ExperimentView from './components/ExperimentView'
 
+import Register from './components/register'
+import ForgotPassword from './components/ForgotPassword'
+
 
 function App() {
   return (
@@ -48,6 +51,9 @@ function App() {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/ask" element={<Ask />} />
         <Route path="/signin" element={<SignIn />} />
+        <Route path="/sign-up" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/sign-in" element={<SignIn />} />
 
         
 

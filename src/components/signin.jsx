@@ -26,7 +26,7 @@ export default function SignIn() {
           <div className="row bg-white shadow rounded-4 overflow-hidden">
 
             {/* Image Section - on top for mobile, left for desktop */}
-            <div className="col-12 col-md-6 order-1 order-md-0 p-0">
+            <div className="col-12 col-md-6 order-1 order-md-0 p-0 d-none d-md-block">
               <img
                 src={Image}
                 alt="Sign In"
@@ -65,7 +65,7 @@ export default function SignIn() {
                     required
                   />
                   <i
-                    className={`bi ${showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'} position-absolute top-50 end-0 translate-middle-y me-3 fs-5`}
+                    className={`bi ${showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'} position-absolute top-50 end-0 translate-middle-y me-3 fs-5 mt-3`}
                     onClick={() => setShowPassword(prev => !prev)}
                     style={{ cursor: 'pointer' }}
                   ></i>
