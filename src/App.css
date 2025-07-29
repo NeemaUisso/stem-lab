@@ -1,34 +1,29 @@
-
-
+/* Buttons */
 .btn-custom-blue {
   background-color: #2596be !important;
+  color: white !important;
+  border: none;
 }
+
+/* Dark blue text class */
 .text-darkblue {
-  color: darkblue
+  color: #003366 !important;
 }
 
+.bg-darkblue {
+  background-color: #003366 !important;
+  border: none;
+}
 
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  background-color: rgba(0, 0, 0, 0.6); /* Makes arrows visible */
-  border-radius: 50%;
-  background-size: 100% 100%;
+.btn-darkblue {
+  background-color: #003366 !important;
 }
-.carousel {
-  overflow: hidden;
-}
+
+/* Always white nav text on colored bg */
+
+
+/* Body overflow control */
 body {
-    overflow-x: hidden;
-    max-width: 100%;
+  overflow-x: hidden;
+  max-width: 100%;
 }
-.card {
-  transition: transform 0.3s ease;
-  cursor: pointer; /* Optional: changes cursor on hover */
-}
-
-.card:hover {
-  transform: scale(1.05);
-}
-
-
-

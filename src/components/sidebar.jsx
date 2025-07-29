@@ -1,47 +1,86 @@
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import Drawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import {
+  ChevronRight,
+  Code,
+  Functions,
+  Science,
+  Biotech,
+  LocalFlorist,
+  Flight,
+  PrecisionManufacturing
+} from '@mui/icons-material';
 
-const Sidebar = ({ collapsed }) => {
+const drawerWidth = 240;
+const drawerColor = '#2596be'; // same as navbar
+const textColor = 'darkblue';
+const hoverColor = '#1c7ea5'; // darker blue for hover
+const activeBgColor = '#ffffff55'; // semi-transparent white for active
+
+const Sidebar = ({ open, onClose }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const menuItems = [
+    { text: 'Robotics', icon: <PrecisionManufacturing />, path: '/robotics' },
+    { text: 'Aviation', icon: <Flight />, path: '/aviation' },
+    { text: 'Coding', icon: <Code />, path: '/coding' },
+    { text: 'Mathematics', icon: <Functions />, path: '/mathematics' },
+    { text: 'Physics', icon: <Science />, path: '/physics' },
+    { text: 'Chemistry', icon: <Biotech />, path: '/chemistry' },
+    { text: 'Biology', icon: <LocalFlorist />, path: '/biology' }
+  ];
 
   return (
-    < div style={{ 
-      width: '200px',
-      height:'100vh',
-      backgroundColor:'#2600ffff',
-      position:'fixed',
-      top:'56px',
-      marginTop:'50px',
-      left:0,
-      zIndex:1000,
-
-    }}>
-    <div
-      className={`text-white sticky-top  p-4 ${collapsed ? 'd-none' : 'd-block'}`}
-      style={{
-        width: '200px',
-        height: '100vh',
-        backgroundColor: '#2600ffff',
-        position: 'sticky',
-        top: 0,
+    <Drawer
+      sx={{
+        width: drawerWidth,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: drawerWidth,
+          backgroundColor: drawerColor,
+          boxSizing: 'border-box',
+          color: textColor
+        },
       }}
+      variant="persistent"
+      anchor="right"
+      open={open}
     >
-      <div className= "pt-5">
-        <h5 className="fw-bold">Stem Lab</h5>
-      <ul className="nav flex-column">
-        <li className="nav-item"><a className="nav-link text-white" href="#">Robotics</a></li>
-        <li className="nav-item"><a className="nav-link text-white" href="#">Aviation</a></li>
-        <li className="nav-item"><a className="nav-link text-white" href="#">Coding</a></li>
-        <li className="nav-item"><a className="nav-link text-white" href="#"><i class="bi bi-calculator"></i><span className="ms-2">Mathematics</span></a></li>
-        <li className="nav-item"><a className="nav-link text-white" href="#"><i class="bi bi-tropical-storm"></i><span className="ms-2">Physics</span></a></li>
-        <li className="nav-item"><a className="nav-link text-white" href="#"><i class="bi bi-flask-fill"></i><span className="ms-2">Chemistry</span></a></li>
-        <li className="nav-item"><a className="nav-link text-white" href="#"><i class="bi bi-lungs-fill"></i><span className="ms-2">Biology</span></a></li>
-      </ul>
-      </div>
-
-  
-    </div>
-
-  </div>
-
+      <IconButton onClick={onClose} sx={{ color: textColor, marginLeft: 'auto', m: 1 }}>
+        <ChevronRight />
+      </IconButton>
+      <Divider sx={{ backgroundColor: '#fff' }} />
+      <List>
+        {menuItems.map(({ text, icon, path }) => {
+          const isActive = location.pathname === path;
+          return (
+            <ListItem key={text} disablePadding>
+              <ListItemButton
+                onClick={() => navigate(path)}
+                sx={{
+                  '&:hover': {
+                    backgroundColor: hoverColor,
+                  },
+                  backgroundColor: isActive ? activeBgColor : 'transparent',
+                }}
+              >
+                <ListItemIcon sx={{ color: textColor }}>{icon}</ListItemIcon>
+                <ListItemText primary={text} primaryTypographyProps={{ style: { color: textColor } }} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
+      </List>
+    </Drawer>
   );
 };
 
