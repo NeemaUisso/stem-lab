@@ -1,62 +1,112 @@
 import React from 'react';
+import {
+  Box,
+  Container,
+  Grid,
+  Typography,
+  Link,
+  IconButton,
+  Fab,
+  Zoom,
+} from '@mui/material';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import InstagramIcon from '@mui/icons-material/Instagram';
+import TikTokIcon from '@mui/icons-material/MusicNote';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
-function Footer() {
+const ScrollTop = () => {
+  const handleClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
-    <footer className="text-center text-lg-start text-white" style={{ backgroundColor: 'rgb(0, 0, 46)' }}>
-      <div className="container p-4 pb-0">
-
-        {/* Section: Links */}
-        <section>
-          <div className="row">
-
-            {/* Useful Links */}
-            <div className="col-md-3 col-lg-2 col-xl-2 mx-auto mt-3">
-              <h6 className="text-uppercase mb-4 font-weight-bold">
-                USEFUL LINK
-              </h6>
-              <p><a href="#" className="text-white text-decoration-none">Home</a></p>
-              <p><a href="#" className="text-white text-decoration-none">Partners</a></p>
-              <p><a href="https://adilisha.or.tz" className="text-white text-decoration-none">Read-More</a></p>
-            </div>
-
-            <hr className="w-100 clearfix d-md-none" />
-
-            {/* Contact */}
-            <div className="col-md-4 col-lg-3 col-xl-3 mx-auto mt-3">
-              <h6 className="text-uppercase mb-4 font-weight-bold">Contact</h6>
-              <p><i className="bi bi-house me-2"></i> Bondeni Street, Ghana <br /> Mwanza - Tanzania</p>
-              <p><i className="bi bi-envelope-open-fill me-2"></i> info@adilisha.or.tz</p>
-              <p><i className="bi bi-telephone-fill me-2"></i> 0282561724</p>
-            </div>
-
-          </div>
-        </section>
-
-        <hr className="my-3" />
-
-        <section className="p-3 pt-0">
-          <div className="row d-flex align-items-center">
-
-            <div className="col-md-7 col-lg-8 text-center text-md-start">
-              <div className="p-3">
-                © 2025 Copyright:
-                <a href="https://adilisha.or.tz" className="text-white text-decoration-none ms-1">adilisha All Rights Reserved</a>
-              </div>
-            </div>
-
-            {/* Socials */}
-            <div className="col-md-5 col-lg-4 text-center text-md-end">
-              <a className="btn btn-outline-light btn-floating m-1" href="#"><i className="bi bi-facebook"></i></a>
-              <a className="btn btn-outline-light btn-floating m-1" href="#"><i className="bi bi-twitter"></i></a>
-              <a className="btn btn-outline-light btn-floating m-1" href="#"><i className="bi bi-instagram"></i></a>
-              <a className="btn btn-outline-light btn-floating m-1" href="#"><i className="bi bi-tiktok"></i></a>
-            </div>
-
-          </div>
-        </section>
-      </div>
-    </footer>
+    <Zoom in={true}>
+      <Box
+        onClick={handleClick}
+        role="presentation"
+        sx={{
+          position: 'fixed',
+          bottom: 24,
+          right: 24,
+          zIndex: 1000,
+        }}
+      >
+        <Fab size="small" aria-label="scroll back to top" sx={{ bgcolor: '#003366', color: 'white' }}>
+          <KeyboardArrowUpIcon />
+        </Fab>
+      </Box>
+    </Zoom>
   );
-}
+};
+
+const Footer = () => {
+  return (
+    <Box component="footer" sx={{ backgroundColor: '#003366', color: 'white', mt: 6, pt: 4 }}>
+      <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 4 } }}>
+        <Grid container spacing={4} justifyContent="space-between">
+          {/* Useful Links */}
+          <Grid item xs={12} sm={4} md={3}>
+            <Typography variant="h6" gutterBottom>USEFUL LINKS</Typography>
+            <Box>
+              <Link href="#" underline="none" color="inherit" display="block" mb={1}>Home</Link>
+              <Link href="#" underline="none" color="inherit" display="block" mb={1}>Partners</Link>
+              <Link href="https://adilisha.or.tz" underline="none" color="inherit" display="block" mb={1}>Read More</Link>
+            </Box>
+          </Grid>
+
+          {/* Contact */}
+          {/* Contact */}
+<Grid item xs={12} sm={5} md={4}>
+  <Typography variant="h6" gutterBottom>CONTACT</Typography>
+
+  <Box display="flex" alignItems="center" mb={1}>
+    <LocationOnIcon sx={{ mr: 1 }} />
+    <Typography variant="body2">
+      Bondeni Street, Ghana<br />
+      Mwanza - Tanzania
+    </Typography>
+  </Box>
+
+  <Box display="flex" alignItems="center" mb={1}>
+    <EmailIcon sx={{ mr: 1 }} />
+    <Typography variant="body2">info@adilisha.or.tz</Typography>
+  </Box>
+
+  <Box display="flex" alignItems="center">
+    <PhoneIcon sx={{ mr: 1 }} />
+    <Typography variant="body2">0282561724</Typography>
+  </Box>
+</Grid>
+
+
+          {/* Socials */}
+          <Grid item xs={12} sm={12} md={3} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
+            <Typography variant="h6" gutterBottom>FOLLOW US</Typography>
+            <IconButton color="inherit" href="#"><FacebookIcon /></IconButton>
+            <IconButton color="inherit" href="#"><TwitterIcon /></IconButton>
+            <IconButton color="inherit" href="#"><InstagramIcon /></IconButton>
+            <IconButton color="inherit" href="#"><TikTokIcon /></IconButton>
+          </Grid>
+        </Grid>
+
+        <Box mt={4} borderTop={1} borderColor="gray" pt={3} pb={2} display="flex" justifyContent="space-between" flexWrap="wrap">
+          <Typography variant="body2">
+            © 2025 Copyright: 
+            <Link href="https://adilisha.or.tz" color="inherit" underline="none" sx={{ ml: 1 }}>
+              Adilisha All Rights Reserved
+            </Link>
+          </Typography>
+        </Box>
+      </Container>
+
+      {/* Scroll to Top Button */}
+      <ScrollTop />
+    </Box>
+  );
+};
 
 export default Footer;

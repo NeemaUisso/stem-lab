@@ -1,83 +1,148 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import bgImage from '../assets/biosampleV.JPG';
+import { Box, Typography, Grid, Card, CardActionArea, Tooltip } from '@mui/material';
+import ScienceIcon from '@mui/icons-material/Science';
+import BiotechIcon from '@mui/icons-material/Biotech';
+import FunctionsIcon from '@mui/icons-material/Functions';
+import FlightIcon from '@mui/icons-material/Flight';
+import CodeIcon from '@mui/icons-material/Code';
+import MemoryIcon from '@mui/icons-material/Memory';
+import SchoolIcon from '@mui/icons-material/School';
 
-function Home() {
-  const backgroundStyle = {
-    backgroundImage: `url(${bgImage})`,
-    backgroundSize: 'cover',
-    backgroundPosition: 'center',
-    minHeight: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: '2rem',
-  };
+const subjects = [
+  { name: 'Biology', icon: <BiotechIcon /> },
+  { name: 'Chemistry', icon: <ScienceIcon /> },
+  { name: 'Physics', icon: <ScienceIcon /> },
+  { name: 'Mathematics', icon: <FunctionsIcon /> },
+  { name: 'Aviation', icon: <FlightIcon /> },
+  { name: 'Coding', icon: <CodeIcon /> },
+  { name: 'Robotics', icon: <MemoryIcon /> },
+];
 
-  const spotlighted = ["Aviation", "Coding", "Robotics"];
+const spotlighted = ['Mathematics', 'Aviation', 'Coding', 'Robotics'];
 
-  const subjects = [
-    'Biology',
-    'Chemistry',
-    'Physics',
-    'Mathematics',
-    'Aviation',
-    'Coding',
-    'Robotics',
-  ];  
-
-
+const Home = () => {
   return (
-    <div style={backgroundStyle}>
-      <div className="bg-white bg-opacity-75 p-5 rounded shadow" style={{ maxWidth: '1000px', width: '100%' }}>
-        <h2 className="text-custom-blue text-center mb-4" style={{ color: '#2596be' }}>Welcome to the STEM Virtual Lab</h2>
-        <div className="container">
-<div className="row g-3 justify-content-center">
-            {subjects.map((subject, index) => {
-              const isSpotlight = spotlighted.includes(subject);
+    <Box
+      sx={{
+        backgroundImage: `url(${bgImage})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        minHeight: '100vh',
+        padding: '3rem 3rem',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+      }}
+    >
+      <Box
+        sx={{
+          backdropFilter: 'blur(6px)',
+          backgroundColor: 'rgba(255, 255, 255, 0.6)',
+          borderRadius: '16px',
+          padding: '2rem',
+          width: '100%',
+          maxWidth: '1100px',
+          boxShadow: '0 8px 20px rgba(0,0,0,0.2)',
+          animation: 'fadeSlideUp 1s ease-in-out',
+        }}
+      >
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ color: '#003366', fontWeight: 'bold', mb: 4 }}
+        >
+          Welcome to the STEM Virtual Lab
+        </Typography>
 
-              let bgColor = isSpotlight ? '#003366' : (index % 2 === 0 ? '#ffffff' : '#2596be');
-              let textColor = isSpotlight
-                ? '#ffffff'
-                : (bgColor === '#ffffff' ? '#003366' : '#ffffff');
+        <Grid container spacing={3} justifyContent="center">
+          {subjects.map((subject, index) => {
+            const isSpotlight = spotlighted.includes(subject.name);
+            const bgColor = isSpotlight ? '#003366' : '#ffffff';
+            const textColor = isSpotlight ? '#ffffff' : '#003366';
 
-              return (
-                <div className="col-6 col-md-4 col-lg-3" key={index}>
-                  <Link to={`/virtual-lab/${subject}`} style={{ textDecoration: 'none' }}>
-                  
-                    <div
-                      style={{
+            return (
+              <Grid item xs={6} sm={4} md={3} key={subject.name}>
+                <Tooltip title={`Explore ${subject.name}`} arrow>
+                  <Link to={`/virtual-lab/${subject.name.toLowerCase()}`} style={{ textDecoration: 'none' }}>
+                    <Card
+                      sx={{
                         backgroundColor: bgColor,
                         color: textColor,
-                        padding: isSpotlight ? '1.2rem' : '1rem',
-                        borderRadius: '10px',
-                        fontWeight: 'bold',
+                        borderRadius: 2,
+                        minHeight: '100px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
                         textAlign: 'center',
                         boxShadow: isSpotlight
                           ? '0 0 15px rgba(0, 51, 102, 0.7)'
                           : '0 4px 8px rgba(0,0,0,0.2)',
-                        transform: isSpotlight ? 'scale(1.05)' : 'scale(1)',
                         border: isSpotlight ? '2px solid #2596be' : 'none',
-                        transition: 'transform 0.3s, box-shadow 0.3s',
-                        cursor: 'pointer',
+                        transition: 'all 0.6s ease-in-out',
+                        opacity: 0.85,
+                        animation: `fadeSlideUp 0.4s infinite ease ${index * 0.15}s both, pulse 3s infinite ease-in-out`,
+                        '&:hover': {
+                          transform: 'scale(1.08)',
+                          opacity: 1,
+                          boxShadow: '0 0 25px rgba(0, 0, 0, 0.3)',
+                        },
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.08)')}
-                      onMouseLeave={(e) => (e.currentTarget.style.transform = isSpotlight ? 'scale(1.05)' : 'scale(1)')}
                     >
-                      {subject}
-                    </div>
+                      <CardActionArea sx={{ p: 2 }}>
+                        <Box display="flex" flexDirection="column" alignItems="center">
+                          {React.cloneElement(subject.icon, {
+                            sx: { fontSize: 30, color: textColor, mb: 1 },
+                          })}
+                          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: textColor }}>
+                            {subject.name}
+                          </Typography>
+                        </Box>
+                      </CardActionArea>
+                    </Card>
                   </Link>
-                </div>
-              );
-            })}
-          </div>
-          
-        </div>
-      </div>
-      
-    </div>
-    
+                </Tooltip>
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Box>
+
+      <style>
+        {`
+          @keyframes fadeSlideUp {
+            from {
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+
+          @keyframes pulse {
+            0% {
+              transform: scale(1);
+              opacity: 0.85;
+            }
+            50% {
+              transform: scale(1.02);
+              opacity: 1;
+            }
+            100% {
+              transform: scale(1);
+              opacity: 0.85;
+            }
+          }
+        `}
+      </style>
+    </Box>
   );
-}
+};
 
 export default Home;
