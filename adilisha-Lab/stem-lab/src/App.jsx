@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import AppNavbar from './components/Navbar';
 import Home from './pages/Home';
 import FAQ from './components/FAQ';
-import StemClub from './components/StemClub';
+import StemClub from './components/Stemclub';
 import Footer from './components/Footer';
 import UploadPracticalForm from './instructorPanel/UploadPracticalForm';
 import Ask from './components/Ask';
@@ -11,7 +11,12 @@ import SignIn from './components/signin';
 import ExperimentView from './components/ExperimentView';
 import LabLayout from './components/labLayout';
 import Sidebar from './components/sidebar';
+import SignUp from './components/register'
 import './App.css';
+
+
+
+
 
 const AppContent = () => {
   const location = useLocation();
@@ -21,43 +26,48 @@ const AppContent = () => {
   const isMainContent =
     location.pathname.startsWith('/virtual-lab') ||
     location.pathname.includes('/subject');
+    {location.pathname !== '/signin' && <Ask />}
+
 
   return (
     <>
       <AppNavbar toggleSidebar={toggleSidebar} />
-      <div  style={{ display: 'flex' }}>
+      <div style={{ display: 'flex' }}>
         {isMainContent && <Sidebar open={sidebarOpen} />}
-        {/* <div style={{ flexGrow: 1, marginTop: '70px', padding: '20px' }}> */}
-          <Routes>
-            <Route
-              path="/"
-  element={
-    <div style={{ width: '100%' }}>
-      <Home />
-      <div className="container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
-        <FAQ />
-        <StemClub />
-        </div>
-        <Footer />
-      
-    </div>
-  }
-/>
-            <Route path="/stem-club" element={<StemClub />} />
-            <Route path="/upload-practical" element={<UploadPracticalForm />} />
-            <Route path="/virtual-lab" element={<LabLayout />} />
-            <Route path="/virtual-lab/:subject" element={<LabLayout />} />
-            <Route path="/virtual-lab/practical/:id" element={<ExperimentView />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/ask" element={<Ask />} />
-            <Route path="/signin" element={<SignIn />} />
-          </Routes>
-        </div>
-      {/* </div> */}
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <div style={{ width: '100%' }}>
+                <Home />
+                <div className="container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
+                  <div id="faq">
+                    <FAQ />
+                  </div>
+                  <div id="stem-club">
+                   <StemClub />
+                  </div>
+                </div>
+                <Footer />
+              </div>
+            }
+          />
+          {/* <Route path="/stem-club" element={<StemClub />} /> */}
+          <Route path="/upload-practical" element={<UploadPracticalForm />} />
+          <Route path="/virtual-lab" element={<LabLayout />} />
+          <Route path="/virtual-lab/:subject" element={<LabLayout />} />
+          <Route path="/virtual-lab/practical/:id" element={<ExperimentView />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          {/* <Route path="/ask" element={<Ask />} />  */}
+          <Route path="/signin" element={<SignIn />} />
+        </Routes>
+      </div>
+
+      {/* ✅ Add Ask here to float on all pages */}
+      <Ask />
     </>
   );
 };
-
 function App() {
   return (
     <BrowserRouter>
@@ -66,4 +76,5 @@ function App() {
   );
 }
 
-export default App;
+export default App; // ✅ This line must exist
+

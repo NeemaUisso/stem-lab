@@ -1,6 +1,15 @@
 // src/components/Sidebar.jsx
 import React from 'react';
-import { Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, IconButton } from '@mui/material';
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  IconButton
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ScienceIcon from '@mui/icons-material/Science';
@@ -22,12 +31,16 @@ const subjects = [
   { name: 'Biology', icon: <BiotechIcon /> },
 ];
 
-const Sidebar = ({ open }) => {
+const Sidebar = ({ open, setOpen }) => {
   const navigate = useNavigate();
 
   const handleNavigate = (subject) => {
-    const path = `/virtual-lab/subject/${subject.toLowerCase()}`;
+    const path = `/virtual-lab/${subject.toLowerCase()}`;
     navigate(path);
+  };
+
+  const toggleDrawer = () => {
+    setOpen(!open); // Close if open, open if closed
   };
 
   return (
@@ -48,12 +61,17 @@ const Sidebar = ({ open }) => {
         },
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: open ? 'flex-end' : 'center', padding: '8px' }}>
-        {open && (
-          <IconButton onClick={() => {}} style={{ color: '#fff' }}>
-            <ChevronLeftIcon />
-          </IconButton>
-        )}
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: open ? 'flex-end' : 'center',
+          padding: '8px',
+        }}
+      >
+        <IconButton onClick={toggleDrawer} style={{ color: '#fff' }}>
+          <ChevronLeftIcon />
+        </IconButton>
       </div>
       <Divider />
       <List>
@@ -68,7 +86,16 @@ const Sidebar = ({ open }) => {
               }}
               onClick={() => handleNavigate(name)}
             >
-              <ListItemIcon sx={{ color: '#fff', minWidth: 40, mr: open ? 3 : 'auto', justifyContent: 'center', display:'flex', alignItems: 'center' }}>
+              <ListItemIcon
+                sx={{
+                  color: '#fff',
+                  minWidth: 0,
+                  mr: open ? 2 : 'auto',
+                  justifyContent: 'center',
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+              >
                 {icon}
               </ListItemIcon>
               {open && <ListItemText primary={name} />}
