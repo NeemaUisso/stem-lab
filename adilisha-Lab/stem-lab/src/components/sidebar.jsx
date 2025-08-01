@@ -26,7 +26,7 @@ const Sidebar = ({ open }) => {
   const navigate = useNavigate();
 
   const handleNavigate = (subject) => {
-    const path = `/virtual-lab/subject/${subject.toLowerCase()}`;
+    const path = `/virtual-lab/${subject.toLowerCase()}`;
     navigate(path);
   };
 
