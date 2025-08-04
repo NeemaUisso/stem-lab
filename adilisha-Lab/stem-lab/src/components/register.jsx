@@ -3,32 +3,95 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 
 export default function Register() {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [show, setShow] = useState({ password: false, confirmPassword: false });
+  const [message, setMessage] = useState('');
   const [formData, setFormData] = useState({
     firstName: '',
-    lastName: '',
-    gender: '',
-    level: '',
+     lastName: '',
+      gender: '',
+    level: '', 
     school: '',
-    phone: '',
-    email: '',
+     phone: '',
+    email: '', 
     password: '',
-    confirmPassword: '',
+     confirmPassword: ''
   });
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.id]: e.target.value,
-    }));
+  const handleChange = ({ target: { id, value } }) => {
+    setFormData(prev => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
+  const toggleVisibility = (field) => {
+    setShow(prev => ({ ...prev, [field]: !prev[field] }));
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('http://127.0.0.1:3000/api/users/registerUser', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        console.error("Registration error:", err);
+        throw new Error(err.message || 'Registration failed');
+      }
+
+      const result = await res.json();
+      setMessage(`User created successfully! ID: ${result.id}`);
+      setFormData({
+        firstName: '',
+         lastName: '',
+          gender: '',
+        level: '',
+         school: '', 
+         phone: '',
+        email: '',
+         password: '',
+          confirmPassword: ''
+      });
+
+    } catch (err) {
+      setMessage("Error: " + err.message);
+      console.error("Registration error:", err);
+    }
+  };
+
+  const renderInput = (label, id, type = 'text') => (
+    <div className="mb-3">
+      <label className="form-label">{label}</label>
+      <input
+        type={type}
+        id={id}
+        className="form-control border border-primary"
+        value={formData[id]}
+        onChange={handleChange}
+        required
+      />
+    </div>
+  );
+
+  const renderPassword = (label, id) => (
+    <div className="col-md-6 mb-3 position-relative">
+      <label className="form-label">{label}</label>
+      <input
+        type={show[id] ? 'text' : 'password'}
+        id={id}
+        className="form-control border border-primary"
+        value={formData[id]}
+        onChange={handleChange}
+        required
+      />
+      <i
+        className={`bi ${show[id] ? 'bi-eye-slash-fill' : 'bi-eye-fill'} position-absolute top-50 end-0 translate-middle-y me-3 fs-5 mt-3`}
+        style={{ cursor: 'pointer' }}
+        onClick={() => toggleVisibility(id)}
+      />
+    </div>
+  );
 
   return (
     <div className="container py-5 mt-5">
@@ -37,34 +100,13 @@ export default function Register() {
           <div className="card shadow-lg rounded-4">
             <div className="card-body p-4">
               <h2 className="text-center mb-4 text-primary fw-bold">Register</h2>
+              {message && <div className="alert alert-info">{message}</div>}
               <form onSubmit={handleSubmit}>
-                {/* First and Last Name */}
                 <div className="row">
-                  <div className="col-md-6 mb-3">
-                    <label className="form-label">First Name</label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      className="form-control primary border border-primary"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <label className="form-label">Last Name</label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      className="form-control border border-primary"
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+                  <div className="col-md-6">{renderInput("First Name", "firstName")}</div>
+                  <div className="col-md-6">{renderInput("Last Name", "lastName")}</div>
                 </div>
 
-                {/* Gender and Level */}
                 <div className="row">
                   <div className="col-md-6 mb-3">
                     <label className="form-label">Gender</label>
@@ -90,91 +132,26 @@ export default function Register() {
                       required
                     >
                       <option value="">Select level</option>
-                      <option value="form I">Form I</option>
-                      <option value="form II">Form II</option>
-                      <option value="form III">Form III</option>
-                      <option value="form IV">Form IV</option>
+                      <option value="student">Student</option>
+                      <option value="teacher">Teacher</option>
+                      <option value="instructor">Instructor</option>
+                    
                     </select>
                   </div>
                 </div>
 
-                {/* School and Phone */}
                 <div className="row">
-                  <div className="col-md-6 mb-3">
-                    <label className="form-label">School</label>
-                    <input
-                      type="text"
-                      id="school"
-                      className="form-control border border-primary"
-                      value={formData.school}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="col-md-6 mb-3">
-                    <label className="form-label">Phone</label>
-                    <input
-                      type="tel"
-                      id="phone"
-                      className="form-control border border-primary"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
+                  <div className="col-md-6">{renderInput("School", "school")}</div>
+                  <div className="col-md-6">{renderInput("Phone", "phone", "tel")}</div>
                 </div>
 
-                {/* Email */}
-                <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="form-control border border-primary"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
+                {renderInput("Email", "email", "email")}
 
-                {/* Password and Confirm Password */}
                 <div className="row">
-                  <div className="col-md-6 mb-3 position-relative">
-                    <label className="form-label">Password</label>
-                    <input
-                      type={showPassword ? 'text' : 'password'}
-                      id="password"
-                      className="form-control border border-primary"
-                      value={formData.password}
-                      onChange={handleChange}
-                      required
-                    />
-                    <i
-                      className={`bi ${showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'} position-absolute top-50 end-0 translate-middle-y me-3 fs-5 mt-3`} 
-                      onClick={() => setShowPassword((prev) => !prev)}
-                      style={{ cursor: 'pointer' }}
-                    ></i>
-                  </div>
-
-                  <div className="col-md-6 mb-3 position-relative">
-                    <label className="form-label">Confirm Password</label>
-                    <input
-                      type={showConfirmPassword ? 'text' : 'password'}
-                      id="confirmPassword"
-                      className="form-control border border-primary"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      required
-                    />
-                    <i
-                      className={`bi ${showConfirmPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'} position-absolute top-50 end-0 translate-middle-y me-3 fs-5 mt-3`}
-                      onClick={() => setShowConfirmPassword((prev) => !prev)}
-                      style={{ cursor: 'pointer' }}
-                    ></i>
-                  </div>
+                  {renderPassword("Password", "password")}
+                  {renderPassword("Confirm Password", "confirmPassword")}
                 </div>
 
-                {/* Submit Button */}
                 <div className="d-grid mt-4">
                   <button type="submit" className="btn btn-primary btn-lg">
                     Register

@@ -1,16 +1,29 @@
-// src/context/AuthContext.js
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import {jwtDecode }from 'jwt-decode';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [role, setRole] = useState(null);
+  const [user, setUser] = useState(null);
 
-  const login = () => setIsAuthenticated(true);
-  const logout = () => setIsAuthenticated(false);
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decoded = jwtDecode(token);
+      setUser(decoded);
+      setRole(decoded.role);
+    }
+  }, []);
+
+  const logout = () => {
+    localStorage.clear();
+    setUser(null);
+    setRole(null);
+  };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, role, logout }}>
       {children}
     </AuthContext.Provider>
   );

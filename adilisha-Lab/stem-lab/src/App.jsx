@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+
 import AppNavbar from './components/Navbar';
 import Home from './pages/Home';
 import FAQ from './components/FAQ';
@@ -8,15 +9,13 @@ import Footer from './components/Footer';
 import UploadPracticalForm from './instructorPanel/UploadPracticalForm';
 import Ask from './components/Ask';
 import SignIn from './components/signin';
+import SignUp from './components/register';
 import ExperimentView from './components/ExperimentView';
-import LabLayout from './components/labLayout';
+import LabLayout from './pages/labLayout';
 import Sidebar from './components/sidebar';
-import SignUp from './components/register'
+import RoleBasedRoute from './routes/RoleBasedRoute';
+
 import './App.css';
-
-
-
-
 
 const AppContent = () => {
   const location = useLocation();
@@ -26,48 +25,70 @@ const AppContent = () => {
   const isMainContent =
     location.pathname.startsWith('/virtual-lab') ||
     location.pathname.includes('/subject');
-    {location.pathname !== '/signin' && <Ask />}
 
+  const hideAsk =
+    location.pathname === '/sign-in' ||
+    location.pathname === '/signin' ||
+    location.pathname === '/sign-up';
 
   return (
     <>
       <AppNavbar toggleSidebar={toggleSidebar} />
+
       <div style={{ display: 'flex' }}>
         {isMainContent && <Sidebar open={sidebarOpen} />}
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <div style={{ width: '100%' }}>
-                <Home />
-                <div className="container" style={{ paddingTop: '40px', paddingBottom: '40px' }}>
-                  <div id="faq">
-                    <FAQ />
+
+        <div style={{ flexGrow: 1 }}>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <div style={{ width: '100%' }}>
+                  <Home />
+                  <div
+                    className="container"
+                    style={{ paddingTop: '40px', paddingBottom: '40px' }}
+                  >
+                    <div id="faq">
+                      <FAQ />
+                    </div>
+                    <div id="stem-club">
+                      <StemClub />
+                    </div>
                   </div>
-                  <div id="stem-club">
-                   <StemClub />
-                  </div>
+                  <Footer />
                 </div>
-                <Footer />
-              </div>
-            }
-          />
-          {/* <Route path="/stem-club" element={<StemClub />} /> */}
-          <Route path="/upload-practical" element={<UploadPracticalForm />} />
-          <Route path="/virtual-lab" element={<LabLayout />} />
-          <Route path="/virtual-lab/:subject" element={<LabLayout />} />
-          <Route path="/virtual-lab/practical/:id" element={<ExperimentView />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          {/* <Route path="/ask" element={<Ask />} />  */}
-          <Route path="/signin" element={<SignIn />} />
-        </Routes>
+              }
+            />
+
+            {/* Auth routes */}
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+
+            {/* Student access */}
+            <Route element={<RoleBasedRoute minimumRole="student" />}>
+              <Route path="/virtual-lab" element={<LabLayout />} />
+              <Route path="/virtual-lab/:subject" element={<LabLayout />} />
+              <Route
+                path="/virtual-lab/practical/:id"
+                element={<ExperimentView />}
+              />
+            </Route>
+
+            {/* Instructor access */}
+            <Route element={<RoleBasedRoute minimumRole="instructor" />}>
+              <Route path="/upload-practical" element={<UploadPracticalForm />} />
+            </Route>
+          </Routes>
+        </div>
       </div>
 
-      {/* ✅ Add Ask here to float on all pages */}
-      <Ask />
+      {!hideAsk && <Ask />}
     </>
   );
 };
+
 function App() {
   return (
     <BrowserRouter>
@@ -76,5 +97,4 @@ function App() {
   );
 }
 
-export default App; // ✅ This line must exist
-
+export default App;
