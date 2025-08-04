@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import LoginImage from '../assets/stemImage.jpeg';
 
 export default function SignIn() {
@@ -25,38 +25,45 @@ export default function SignIn() {
 
       const result = await res.json();
 
-      if (!res.ok) {
+      if (!res.ok || !result.token) {
         setMessage("Error: " + (result.message || 'Login failed'));
         return;
       }
 
-      //Decode token to get user info
+      // Decode token
       const decoded = jwtDecode(result.token);
+      console.log("Login response:", result);
+      console.log("Decoded token:", decoded);
 
-      //  Store token & user info
+      // Optional fallback role
+      const role = decoded.role || 'student'; // fallback to 'student' if role is missing
+
+      // Save to localStorage
       localStorage.setItem('token', result.token);
-      localStorage.setItem('role', decoded.role);
+      localStorage.setItem('role', role);
       localStorage.setItem('user', JSON.stringify(decoded));
 
-      setMessage(`Login successful! Welcome ${decoded.firstName}`);
+      setMessage(`Login successful! Welcome ${decoded.firstName || 'User'}`);
       setFormData({ email: '', password: '' });
 
-      //  Navigate based on role
-      switch (decoded.role) {
-        case 'admin':
-          navigate('/admin');
-          break;
-        case 'teacher':
-          navigate('/teacher');
-          break;
-        case 'instructor':
-          navigate('/instructor');
-          break;
-        case 'student':
-        default:
-          navigate('/virtual-lab');
-          break;
-      }
+      // Redirect by role after short delay
+      setTimeout(() => {
+        switch (role) {
+          case "admin":
+            navigate('/admin');
+            break;
+          case "teacher":
+            navigate('/teacher');
+            break;
+          case 'instructor':
+            navigate('/instructor');
+            break;
+          case "student":
+          default:
+            navigate('/virtual-lab');
+            break;
+        }
+      }, 1500);
 
     } catch (err) {
       console.error("Login error:", err);
@@ -70,7 +77,6 @@ export default function SignIn() {
         <div className="col-12 col-lg-10">
           <div className="row bg-white shadow rounded-4 overflow-hidden">
 
-        
             <div className="col-12 col-md-6 p-0 order-1 order-md-0">
               <img
                 src={LoginImage}
@@ -80,7 +86,6 @@ export default function SignIn() {
               />
             </div>
 
-            
             <div className="col-12 col-md-6 p-4 p-md-5 order-2 order-md-1">
               <h2 className="text-center text-primary mb-4">Sign In</h2>
 
