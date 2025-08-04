@@ -11,7 +11,10 @@ import SignIn from './components/signin';
 import ExperimentView from './components/ExperimentView';
 import LabLayout from './components/labLayout';
 import Sidebar from './components/sidebar';
-import SignUp from './components/register'
+import SignUp from './components/register';
+import Flotation from './pages/flotation';
+
+
 import './App.css';
 
 
@@ -58,12 +61,10 @@ const AppContent = () => {
           <Route path="/virtual-lab/:subject" element={<LabLayout />} />
           <Route path="/virtual-lab/practical/:id" element={<ExperimentView />} />
           <Route path="/sign-up" element={<SignUp />} />
-          {/* <Route path="/ask" element={<Ask />} />  */}
+          <Route path="/flotation" element={<Flotation />} /> 
           <Route path="/signin" element={<SignIn />} />
         </Routes>
       </div>
-
-      {/* ✅ Add Ask here to float on all pages */}
       <Ask />
     </>
   );

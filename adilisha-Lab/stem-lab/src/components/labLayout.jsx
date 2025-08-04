@@ -1,7 +1,7 @@
 // components/LabLayout.jsx
 import React from 'react';
 import Sidebar from './sidebar';
-import MainContent from './maincontent';
+import MainContent from './MainContent';
 import { useParams } from 'react-router-dom';
 
 const LabLayout = () => {
