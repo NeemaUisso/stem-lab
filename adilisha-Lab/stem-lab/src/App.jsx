@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import AppNavbar from './components/Navbar';
 import Home from './pages/Home';
 import FAQ from './components/FAQ';
-import StemClub from './components/Stemclub';
+import StemClub from './components/StemClub';
 import Footer from './components/Footer';
 import UploadPracticalForm from './instructorPanel/UploadPracticalForm';
 import Ask from './components/Ask';
