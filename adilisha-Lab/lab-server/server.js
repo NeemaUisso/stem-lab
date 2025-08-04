@@ -4,13 +4,15 @@ import helmet from 'helmet';
 import cors from 'cors';
 import morgan from 'morgan';
 
-//import database connection
+
+//database
 import connectDB from './configDB/connectDB.js'; 
 connectDB();
 
 //import routes
 import getpracticalsRoutes from './Routes/practicals.route.js';
 import practicalRoutes from './Routes/practicalRoutes.js';
+import userRoutes from './Routes/user.Routes.js';
 
 
 
@@ -30,6 +32,7 @@ app.use('/uploads', express.static('uploads'));
 
 app.use('/api',getpracticalsRoutes);
 app.use('/api/practicals', practicalRoutes);
+app.use('/api/users', userRoutes);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);

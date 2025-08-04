@@ -1,21 +1,67 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import Image from '../assets/stemImage.jpeg'
-
-import LoginImage from '../assets/stemImage.jpeg'; // replace with your image path
+import { Link, useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode';
+import LoginImage from '../assets/stemImage.jpeg';
 
 export default function SignIn() {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
+  const [message, setMessage] = useState('');
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
+    setFormData(prev => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    // submit logic here
+
+    try {
+      const res = await fetch('http://127.0.0.1:3000/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await res.json();
+
+      if (!res.ok) {
+        setMessage("Error: " + (result.message || 'Login failed'));
+        return;
+      }
+
+      //Decode token to get user info
+      const decoded = jwtDecode(result.token);
+
+      //  Store token & user info
+      localStorage.setItem('token', result.token);
+      localStorage.setItem('role', decoded.role);
+      localStorage.setItem('user', JSON.stringify(decoded));
+
+      setMessage(`Login successful! Welcome ${decoded.firstName}`);
+      setFormData({ email: '', password: '' });
+
+      //  Navigate based on role
+      switch (decoded.role) {
+        case 'admin':
+          navigate('/admin');
+          break;
+        case 'teacher':
+          navigate('/teacher');
+          break;
+        case 'instructor':
+          navigate('/instructor');
+          break;
+        case 'student':
+        default:
+          navigate('/virtual-lab');
+          break;
+      }
+
+    } catch (err) {
+      console.error("Login error:", err);
+      setMessage("Error: " + err.message);
+    }
   };
 
   return (
@@ -24,19 +70,23 @@ export default function SignIn() {
         <div className="col-12 col-lg-10">
           <div className="row bg-white shadow rounded-4 overflow-hidden">
 
-            {/* Image Section - on top for mobile, left for desktop */}
-            <div className="col-12 col-md-6 order-1 order-md-0 p-0">
+        
+            <div className="col-12 col-md-6 p-0 order-1 order-md-0">
               <img
-                src={Image}
-                alt="Sign In"
+                src={LoginImage}
+                alt="Login Visual"
                 className="img-fluid w-100 h-100"
                 style={{ objectFit: 'cover', minHeight: '300px' }}
               />
             </div>
 
-            {/* Form Section - below image on mobile */}
-            <div className="col-12 col-md-6 order-2 order-md-1 p-4 p-md-5">
+            
+            <div className="col-12 col-md-6 p-4 p-md-5 order-2 order-md-1">
               <h2 className="text-center text-primary mb-4">Sign In</h2>
+
+              {message && (
+                <div className="alert alert-info text-center">{message}</div>
+              )}
 
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
@@ -67,6 +117,8 @@ export default function SignIn() {
                     className={`bi ${showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'} position-absolute top-50 end-0 translate-middle-y me-3 fs-5`}
                     onClick={() => setShowPassword(prev => !prev)}
                     style={{ cursor: 'pointer' }}
+                    aria-label="Toggle password visibility"
+                    role="button"
                   ></i>
                 </div>
 
@@ -77,8 +129,8 @@ export default function SignIn() {
                 </div>
 
                 <div className="d-flex justify-content-between small">
-                  <a href="/forgot-password" className="text-decoration-none">Forgot Password?</a>
-                  <a href="/sign-up" className="text-decoration-none text-danger">Register</a>
+                  <Link to="/forgot-password" className="text-decoration-none">Forgot Password?</Link>
+                  <Link to="/sign-up" className="text-decoration-none text-danger">Register</Link>
                 </div>
               </form>
             </div>
