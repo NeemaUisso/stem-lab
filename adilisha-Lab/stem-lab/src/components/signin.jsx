@@ -1,9 +1,14 @@
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import LoginImage from '../assets/stemImage.jpeg';
+import { useAuth } from './Auth';
 
 export default function SignIn() {
+  // Although we import useAuth, we won't use the 'user' state directly for navigation,
+  // as it's not updated synchronously with the form submission.
+  const { login } = useAuth();
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [showPassword, setShowPassword] = useState(false);
   const [message, setMessage] = useState('');
@@ -30,15 +35,17 @@ export default function SignIn() {
         return;
       }
 
-      // Decode token
+         login(result.token); 
+
+      // Decode token to get user info and role
       const decoded = jwtDecode(result.token);
       console.log("Login response:", result);
       console.log("Decoded token:", decoded);
 
-      // Optional fallback role
-      const role = decoded.role || 'student'; // fallback to 'student' if role is missing
+      // Get the role from the decoded token, with a 'student' fallback
+      const role = decoded.role || 'student';
 
-      // Save to localStorage
+      // Save token and user info to localStorage
       localStorage.setItem('token', result.token);
       localStorage.setItem('role', role);
       localStorage.setItem('user', JSON.stringify(decoded));
@@ -46,7 +53,9 @@ export default function SignIn() {
       setMessage(`Login successful! Welcome ${decoded.firstName || 'User'}`);
       setFormData({ email: '', password: '' });
 
-      // Redirect by role after short delay
+      // The key change: Navigate based on the 'role' variable
+      // that we just decoded from the token, instead of waiting for
+      // the 'user' state from the Auth context to update.
       setTimeout(() => {
         switch (role) {
           case "admin":
@@ -59,15 +68,17 @@ export default function SignIn() {
             navigate('/instructor');
             break;
           case "student":
-          default:
             navigate('/virtual-lab');
+            break;
+          default:
+            navigate('/');
             break;
         }
       }, 1500);
 
     } catch (err) {
       console.error("Login error:", err);
-      setMessage("Error: " + err.message);
+      setMessage("Error: " + (err.message || 'An unknown error occurred.'));
     }
   };
 
@@ -76,7 +87,6 @@ export default function SignIn() {
       <div className="row justify-content-center align-items-center">
         <div className="col-12 col-lg-10">
           <div className="row bg-white shadow rounded-4 overflow-hidden">
-
             <div className="col-12 col-md-6 p-0 order-1 order-md-0">
               <img
                 src={LoginImage}
@@ -139,7 +149,6 @@ export default function SignIn() {
                 </div>
               </form>
             </div>
-
           </div>
         </div>
       </div>
