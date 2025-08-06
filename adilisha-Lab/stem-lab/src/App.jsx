@@ -14,6 +14,7 @@ import ExperimentView from './components/ExperimentView';
 import LabLayout from './pages/labLayout';
 import Sidebar from './components/sidebar';
 import RoleBasedRoute from './routes/RoleBasedRoute';
+import ArchimedesSimulation from './components/AchimedesSimulation';
 
 import './App.css';
 
@@ -74,11 +75,13 @@ const AppContent = () => {
                 path="/virtual-lab/practical/:id"
                 element={<ExperimentView />}
               />
+              <Route path="/physics" element={<ArchimedesSimulation />} />
             </Route>
 
             {/* Instructor access */}
             <Route element={<RoleBasedRoute minimumRole="instructor" />}>
               <Route path="/upload-practical" element={<UploadPracticalForm />} />
+              
             </Route>
           </Routes>
         </div>
