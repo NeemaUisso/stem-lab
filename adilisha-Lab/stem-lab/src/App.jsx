@@ -14,6 +14,8 @@ import ExperimentView from './components/ExperimentView';
 import LabLayout from './pages/labLayout';
 import Sidebar from './components/sidebar';
 import RoleBasedRoute from './routes/RoleBasedRoute';
+import MathPlayground from './pages/MathPlayground';
+
 
 import './App.css';
 
@@ -79,6 +81,7 @@ const AppContent = () => {
             {/* Instructor access */}
             <Route element={<RoleBasedRoute minimumRole="instructor" />}>
               <Route path="/upload-practical" element={<UploadPracticalForm />} />
+              <Route path='/math-playground' element={<MathPlayground />} />
             </Route>
           </Routes>
         </div>

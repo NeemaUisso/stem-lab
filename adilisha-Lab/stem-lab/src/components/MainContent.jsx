@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Flotation from '../pages/flotation';
 
 const MainContent = ({ subject }) => {
   const [practicals, setPracticals] = useState([]);
@@ -49,7 +50,7 @@ const MainContent = ({ subject }) => {
   }
 
   return (
-    <div className="flex-grow-1" style={{ marginLeft: '200px', marginTop: '70px' }}>
+    <div  style={{  marginTop: '70px' }}>
       <div className="container py-4">
         {Object.keys(groupedPracticals).length > 0 ? (
           Object.entries(groupedPracticals).map(([subj, items]) => (
@@ -80,8 +81,9 @@ const MainContent = ({ subject }) => {
             </div>
           ))
         ) : (
-          <div className="alert alert-info text-center">
+          <div className="alert alert-info text-center container">
             No practicals found{subject ? ` for ${subject}` : ''}.
+               <Flotation />
           </div>
         )}
       </div>

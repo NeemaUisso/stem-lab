@@ -4,6 +4,7 @@ import Sidebar from './sidebar';
 import MainContent from './MainContent';
 import { useParams } from 'react-router-dom';
 
+
 const LabLayout = () => {
   const { subject } = useParams(); // Get dynamic subject from URL
 
@@ -18,6 +19,8 @@ const LabLayout = () => {
         {/* Main Content - dynamic content */}
         <div className="col-md-9">
           <MainContent subject={subject} />
+       
+
         </div>
       </div>
     </div>
