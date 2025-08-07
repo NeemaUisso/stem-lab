@@ -1,4 +1,6 @@
 import React from 'react';
+
+
 import {
   Box,
   Button,
@@ -15,7 +17,7 @@ const AdilishaCompetition = () => {
   return (
     <Container maxWidth="md" sx={{ py: 6 }}>
       {/* Hero Section */}
-      <Box textAlign="center" mb={6}>
+      <Box textAlign="center" mb={6}  sx={{marginTop: '50px'}}>
         <Typography variant="h3" color="primary" fontWeight="bold" gutterBottom>
           Adilisha Innovation Competition 2025
         </Typography>
@@ -24,7 +26,7 @@ const AdilishaCompetition = () => {
         </Typography>
         <Button
           component={Link}
-          to="/register"
+          to="/mashindano-form"
           variant="contained"
           color="primary"
           size="large"
@@ -114,7 +116,7 @@ const AdilishaCompetition = () => {
         </Typography>
         <Button
           component={Link}
-          to="/register"
+          to="/mashindano-form"
           variant="contained"
           color="success"
           size="large"

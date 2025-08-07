@@ -15,6 +15,7 @@ import LabLayout from './pages/labLayout';
 import Sidebar from './components/sidebar';
 import RoleBasedRoute from './routes/RoleBasedRoute';
 import AdilishaCompetition from './pages/mashindano';
+import MashindanoForm from './components/mashindanoForm';
 
 import './App.css';
 
@@ -67,6 +68,7 @@ const AppContent = () => {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/competition" element={<AdilishaCompetition />} />
+            <Route path="/mashindano-form" element={<MashindanoForm />} />
           
 
 
