@@ -168,8 +168,8 @@ const MainContent = () => {
                   </>
                 )}
               </div>
-            )}
-
+          )}
+        
             {/* Mobile Carousel */}
             {subjectCards[subject].length > 0 && (
               <div

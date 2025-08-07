@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import AppNavbar from './components/Navbar';
 import Home from './pages/Home';
 import FAQ from './components/FAQ';
-import StemClub from './components/Stemclub';
+import StemClub from './components/StemClub';
 import Footer from './components/Footer';
 import UploadPracticalForm from './instructorPanel/UploadPracticalForm';
 import Ask from './components/Ask';
@@ -15,6 +15,7 @@ import LabLayout from './pages/labLayout';
 import Sidebar from './components/sidebar';
 import RoleBasedRoute from './routes/RoleBasedRoute';
 import AdilishaCompetition from './pages/mashindano';
+import MathPlayground from './pages/MathPlayground';
 import MashindanoForm from './components/mashindanoForm';
 import ArchimedesSimulation from './components/AchimedesSimulation';
 import StaticElectricity from './components/StaticElectricity';
@@ -77,6 +78,7 @@ const AppContent = () => {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/competition" element={<AdilishaCompetition />} />
+            <Route path='/math-playground' element={<MathPlayground />} />
             <Route path="/mashindano-form" element={<MashindanoForm />} />
             <Route path="/physics/archimedes-principle" element={<ArchimedesSimulation />} />
             <Route path="/physics/static-electricity" element={<StaticElectricity />} />
@@ -87,8 +89,6 @@ const AppContent = () => {
             <Route path="/virtual-lab/aviation" element={<AviationProjects />} />
             <Route path="/virtual-lab/mathematics" element={<MathematicsProjects />} />
             <Route path="/virtual-lab/coding" element={<CodingProjects />} />
-          
-
 
             {/* Student access */}
             <Route element={<RoleBasedRoute minimumRole="student" />}>
