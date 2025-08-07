@@ -18,13 +18,13 @@ const AdilishaCompetition = () => {
     <Container maxWidth="md" sx={{ py: 6 }}>
       {/* Hero Section */}
       <Box textAlign="center" mb={6}  sx={{marginTop: '50px'}}>
-        <Typography variant="h3" color="primary" fontWeight="bold" gutterBottom>
+        <Typography variant="h3" color='#2596be' fontWeight="bold" gutterBottom>
           Adilisha Innovation Competition 2025
         </Typography>
-        <Typography variant="h6" color="textSecondary" paragraph>
+        <Typography variant="h6" color="#2596be" paragraph>
           Empowering youth to build sustainable STEM solutions for African challenges.
         </Typography>
-        <Button
+        <Button sx={{ backgroundColor: '#2596be', color: '#fff' }}
           component={Link}
           to="/mashindano-form"
           variant="contained"
@@ -114,11 +114,10 @@ const AdilishaCompetition = () => {
         <Typography variant="h6" paragraph>
           Ready to transform your ideas into action?
         </Typography>
-        <Button
+      <Button sx={{ backgroundColor: '#2596be', color: '#fff' }}
           component={Link}
           to="/mashindano-form"
           variant="contained"
-          color="success"
           size="large"
         >
           Submit Your Idea
