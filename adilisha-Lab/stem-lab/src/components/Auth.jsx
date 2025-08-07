@@ -40,7 +40,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('role');
     setUser(null);
     setRole(null);
-
   };
 
   const value = { user, role, login, logout };
