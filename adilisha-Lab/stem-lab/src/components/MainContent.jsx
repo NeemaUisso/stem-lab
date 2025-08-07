@@ -1,89 +1,236 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const MainContent = ({ subject }) => {
-  const [practicals, setPracticals] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+import archImage from '../assets/archImage.png';
+import robotImage from '../assets/robot1.png';
+import aviationImage from '../assets/aviation1.png';
+import codeImage from '../assets/code1.png';
+import mathImage from '../assets/math1.png';
+import biologyImage from '../assets/biology1.png';
+import chemistryImage from '../assets/chemistry1.png';
+import staticImg from '../assets/staticImg.png'
 
-  useEffect(() => {
-    const fetchPracticals = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/get-practicals');
-        const data = await response.json();
 
-        if (data.success && Array.isArray(data.data)) {
-          setPracticals(data.data);
-        } else {
-          console.error('Unexpected API response:', data);
-          setPracticals([]);
-        }
-      } catch (error) {
-        console.error('Error fetching practicals:', error);
-        setPracticals([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+const subjects = [
+  'Robotics', 'Aviation', 'Coding', 'Mathematics', 'Biology', 'Physics', 'Chemistry',
+];
 
-    fetchPracticals();
-  }, []);
+const subjectCards = {
+  Robotics: [
+    {
+      image: robotImage,
+      title: 'Line Following Robot',
+      description: 'Build a robot that follows a line using IR sensors.',
+      link: '/practicals/robotics1',
+    },
+  ],
+  Aviation: [
+    {
+      image: aviationImage,
+      title: 'Paper Plane Aerodynamics',
+      description: 'Learn how wing shape affects flight distance.',
+      link: '/practicals/aviation1',
+    },
+  ],
+  Coding: [
+    {
+      image: codeImage,
+      title: 'Simple Calculator App',
+      description: 'Create a calculator using HTML, CSS, and JavaScript.',
+      link: '/practicals/coding1',
+    },
+  ],
+  Mathematics: [
+    {
+      image: mathImage,
+      title: 'Pythagorean Theorem',
+      description: 'Explore right-angled triangles using interactive tools.',
+      link: '/practicals/mathematics1',
+    },
+  ],
+  Biology: [
+    {
+      image: biologyImage,
+      title: 'Microscope Exploration',
+      description: 'Identify plant and animal cells under a microscope.',
+      link: '/practicals/biology1',
+    },
+  ],
+  Physics: [
+    {
+      image: archImage,
+      title: 'Archimedes Principle',
+      description: 'Discover buoyancy and displacement using water.',
+      link: '/physics/archimedes-principle',
+    },
+    {
+      image: staticImg,
+      title: 'Static Electricity',
+      description: 'Comb and Paper Experiment.',
+      link: '/physics/static-electricity',
+    },
+    {
+      image: staticImg,
+      title: 'Static Electricity',
+      description: 'Comb and Paper Experiment.',
+      link: '/physics/static-electricity',
+    },
+    {
+      image: archImage,
+      title: 'Law of Flotation',
+      description: 'Salt, Water and egg Experiment.',
+      link: '/physics/static-electricity',
+    },
+  ],
+  Chemistry: [
+    {
+      image: chemistryImage,
+      title: 'Acid-Base Reaction',
+      description: 'Observe color changes in litmus as pH varies.',
+      link: '/practicals/chemistry1',
+    },
+  ],
+};
 
-  // Filter practicals by subject if provided via props
-  const filteredPracticals = subject
-    ? practicals.filter((p) => p.subject?.toLowerCase() === subject.toLowerCase())
-    : practicals;
-
-  // Group practicals by subject
-  const groupedPracticals = filteredPracticals.reduce((groups, practical) => {
-    const subjKey = practical.subject?.toLowerCase();
-    if (!subjKey) return groups;
-
-    if (!groups[subjKey]) groups[subjKey] = [];
-    groups[subjKey].push(practical);
-    return groups;
-  }, {});
-
-  if (loading) {
-    return <div className="text-center mt-5">Loading practicals...</div>;
-  }
-
+const MainContent = () => {
   return (
-    <div className="flex-grow-1" style={{ marginLeft: '200px', marginTop: '70px' }}>
+    <div className="flex-grow-1 pt-5">
       <div className="container py-4">
-        {Object.keys(groupedPracticals).length > 0 ? (
-          Object.entries(groupedPracticals).map(([subj, items]) => (
-            <div key={subj} className="mb-5">
-              <h3 className="text-capitalize mb-4 border-bottom pb-2">{subj}</h3>
-              <div className="row">
-                {items.map((practical) => (
-                  <div className="col-md-4 mb-4" key={practical._id}>
+        {subjects.map((subject, idx) => (
+          <div key={idx} className="mb-5">
+            <h4 className="mb-3 fw-bold text-primary">{subject}</h4>
+
+            {/* Desktop Carousel */}
+            {subjectCards[subject].length > 0 && (
+              <div
+                id={`carouselLarge-${idx}`}
+                className="carousel slide d-none d-lg-block"
+                data-bs-ride="carousel"
+              >
+                <div className="carousel-inner">
+                  {Array.from({
+                    length: Math.ceil(subjectCards[subject].length / 3),
+                  }).map((_, slideIdx) => (
                     <div
-                      className="card h-100 shadow-sm"
-                      onClick={() => navigate(`/virtual-lab/practical/${practical._id}`)}
-                      style={{ cursor: 'pointer' }}
+                      key={slideIdx}
+                      className={`carousel-item ${slideIdx === 0 ? 'active' : ''}`}
                     >
-                      <img
-                      src={`/${practical.image.replace(/\\/g, '/')}`}  
-                        className="card-img-top"
-                        alt={practical.title}
-                        style={{ height: '200px', objectFit: 'cover' }}
-                      />
-                      <div className="card-body text-white" style={{ backgroundColor: '#050020ff' }}>
-                        <h5 className="card-title">{practical.title}</h5>
-                        <p className="card-text">{practical.topic}</p>
+                      <div className="row gx-3">
+                        {subjectCards[subject]
+                          .slice(slideIdx * 3, slideIdx * 3 + 3)
+                          .map((card, imgIdx) => (
+                            <div className="col-lg-4" key={imgIdx}>
+                              <Link
+                                to={card.link}
+                                className="text-decoration-none text-dark"
+                              >
+                                <div className="card h-100 shadow rounded border-0 transition hover-shadow">
+                                  <img
+                                    src={card.image}
+                                    className="card-img-top rounded-top"
+                                    alt={card.title}
+                                  />
+                                  <div className="card-body">
+                                    <h5 className="card-title fw-semibold">
+                                      {card.title}
+                                    </h5>
+                                    <p className="card-text text-muted small">
+                                      {card.description}
+                                    </p>
+                                  </div>
+                                </div>
+                              </Link>
+                            </div>
+                          ))}
                       </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+
+                {subjectCards[subject].length > 3 && (
+                  <>
+                    <button
+                      className="carousel-control-prev"
+                      type="button"
+                      data-bs-target={`#carouselLarge-${idx}`}
+                      data-bs-slide="prev"
+                    >
+                      <span className="carousel-control-prev-icon"></span>
+                    </button>
+                    <button
+                      className="carousel-control-next"
+                      type="button"
+                      data-bs-target={`#carouselLarge-${idx}`}
+                      data-bs-slide="next"
+                    >
+                      <span className="carousel-control-next-icon"></span>
+                    </button>
+                  </>
+                )}
               </div>
-            </div>
-          ))
-        ) : (
-          <div className="alert alert-info text-center">
-            No practicals found{subject ? ` for ${subject}` : ''}.
+            )}
+
+            {/* Mobile Carousel */}
+            {subjectCards[subject].length > 0 && (
+              <div
+                id={`carouselSmall-${idx}`}
+                className="carousel slide d-lg-none"
+                data-bs-ride="carousel"
+              >
+                <div className="carousel-inner">
+                  {subjectCards[subject].map((card, j) => (
+                    <div
+                      key={j}
+                      className={`carousel-item ${j === 0 ? 'active' : ''}`}
+                    >
+                      <Link
+                        to={card.link}
+                        className="text-decoration-none text-dark"
+                      >
+                        <div className="card shadow rounded border-0">
+                          <img
+                            src={card.image}
+                            className="card-img-top rounded-top"
+                            alt={card.title}
+                          />
+                          <div className="card-body">
+                            <h5 className="card-title fw-semibold">
+                              {card.title}
+                            </h5>
+                            <p className="card-text text-muted small">
+                              {card.description}
+                            </p>
+                          </div>
+                        </div>
+                      </Link>
+                    </div>
+                  ))}
+                </div>
+
+                {subjectCards[subject].length > 1 && (
+                  <>
+                    <button
+                      className="carousel-control-prev"
+                      type="button"
+                      data-bs-target={`#carouselSmall-${idx}`}
+                      data-bs-slide="prev"
+                    >
+                      <span className="carousel-control-prev-icon"></span>
+                    </button>
+                    <button
+                      className="carousel-control-next"
+                      type="button"
+                      data-bs-target={`#carouselSmall-${idx}`}
+                      data-bs-slide="next"
+                    >
+                      <span className="carousel-control-next-icon"></span>
+                    </button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
-        )}
+        ))}
       </div>
     </div>
   );

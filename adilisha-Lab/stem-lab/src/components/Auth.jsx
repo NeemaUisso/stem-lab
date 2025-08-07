@@ -1,6 +1,6 @@
 // Auth.js (or wherever your Auth context is defined)
 
-import React, { createContext, useContext, useState, useEffect, useNavigate } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 
 const AuthContext = createContext(null);
@@ -8,7 +8,6 @@ const AuthContext = createContext(null);
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -43,7 +42,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('role');
     setUser(null);
     setRole(null);
-    navigate('/');
   };
 
   const value = { user, role, login, logout };

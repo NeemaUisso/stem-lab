@@ -4,6 +4,7 @@ import woodImg from "../assets/wood.png";
 import bottleImg from "../assets/bottle.png";
 import beakerImg from "../assets/beaker.png";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min";
 
 const objects = [
   { id: "stone", name: "Stone", volume: 30, density: 5.5, image: stoneImg },
@@ -27,6 +28,10 @@ export default function ArchimedesSimulation() {
   const onDrop = (e) => {
     e.preventDefault();
     const objectId = e.dataTransfer.getData("objectId");
+    handleDrop(objectId);
+  };
+
+  const handleDrop = (objectId) => {
     const obj = objects.find((o) => o.id === objectId);
     if (!obj || droppedObjects.find((o) => o.id === obj.id)) return;
 
@@ -66,32 +71,52 @@ export default function ArchimedesSimulation() {
   };
 
   return (
-    <div className="container my-5 d-flex flex-column align-items-center justify-content-center text-center">
-      <h2 className="mb-4 text-primary">Archimedes' Principle Interactive Simulation</h2>
+    <div className="container my-5 mt-5 pt-5 d-flex flex-column align-items-center justify-content-center text-center">
+      <h2 className="mb-4 text-primary"><strong>Archimedes' Principle Interactive Simulation</strong></h2>
 
-      {/* Hints */}
+      {/* Hint */}
       <div className="alert alert-info w-100">
         💡 <strong>Hint:</strong> Objects that are denser than water will sink. Lighter objects float!
       </div>
 
-      {/* Steps */}
-      <div className="card w-100 mb-4 shadow-sm">
-        <div className="card-body text-start">
-          <h5 className="card-title">🧪 Steps & Procedure</h5>
-          <ol>
-            <li>Observe the beaker filled with water at 50% level.</li>
-            <li>Drag one of the objects (Stone, Wood, Bottle) into the beaker.</li>
-            <li>Notice the water level increase and the object behavior.</li>
-            <li>Read the scientific result of your experiment.</li>
-            <li>Click reset to start again.</li>
-          </ol>
+      {/* Steps & Procedure Dropdown */}
+      <div className="accordion w-100 mb-4 shadow-sm" id="procedureAccordion">
+        <div className="accordion-item">
+          <h2 className="accordion-header" id="headingOne">
+            <button
+              className="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="false"
+              aria-controls="collapseOne"
+            >
+              🧪 Steps & Procedure
+            </button>
+          </h2>
+          <div
+            id="collapseOne"
+            className="accordion-collapse collapse"
+            aria-labelledby="headingOne"
+            data-bs-parent="#procedureAccordion"
+          >
+            <div className="accordion-body text-start">
+              <ol>
+                <li>Observe the beaker filled with water at 50% level.</li>
+                <li>Drag or tap one of the objects (Stone, Wood, Bottle) into the beaker.</li>
+                <li>Notice the water level increase and the object behavior.</li>
+                <li>Read the scientific result of your experiment.</li>
+                <li>Click reset to start again.</li>
+              </ol>
+            </div>
+          </div>
         </div>
       </div>
 
       <div className="row w-100">
         {/* Objects */}
         <div className="col-md-3 mb-4">
-          <h5>Drag an Object</h5>
+          <h5>Drag or Tap an Object</h5>
           <div className="d-flex flex-column gap-3">
             {objects.map((obj) => (
               <img
@@ -100,6 +125,7 @@ export default function ArchimedesSimulation() {
                 alt={obj.name}
                 draggable={!droppedObjects.find((o) => o.id === obj.id)}
                 onDragStart={(e) => onDragStart(e, obj)}
+                onClick={() => handleDrop(obj.id)} // Support mobile tap
                 className="img-fluid border rounded"
                 style={{
                   height: "80px",
@@ -140,13 +166,12 @@ export default function ArchimedesSimulation() {
                 backgroundColor: "#0d6efd",
                 opacity: 0.5,
                 transition: "height 0.5s ease",
-                borderBottomLeftRadius: "50% 10%",
-                borderBottomRightRadius: "50% 10%",
+                borderBottomLeftRadius: "50% 15%",
+                borderBottomRightRadius: "50% 15%",
               }}
             ></div>
 
-            
-            {/* Objects dropped */}
+            {/* Dropped Objects */}
             {droppedObjects.map((obj, index) => {
               const isFloating = obj.density < 1;
               const positionStyle = {
@@ -155,22 +180,12 @@ export default function ArchimedesSimulation() {
                 transform: "translateX(-50%)",
                 position: "absolute",
                 transition: "bottom 0.5s ease",
-                bottom: isFloating ? `${waterLevel - 5 + index * 5}%` : `${index * 8}%`, // float at water surface or sink to bottom
+                bottom: isFloating ? `${waterLevel - 5 + index * 5}%` : `${index * 8}%`,
               };
 
-              return (
-                <img
-                  key={obj.id}
-                  src={obj.image}
-                  alt={obj.name}
-                  style={positionStyle}
-                />
-              );
+              return <img key={obj.id} src={obj.image} alt={obj.name} style={positionStyle} />;
             })}
-
           </div>
-
-          {/* Water Level Indicator */}
           <div className="mt-2 fw-bold text-primary">Water Level: {waterLevel}%</div>
         </div>
 
@@ -180,14 +195,16 @@ export default function ArchimedesSimulation() {
           <div className="border rounded p-3 bg-light shadow-sm" style={{ minHeight: "120px" }}>
             {result || "Drop an object to see what happens."}
           </div>
-          <button className="btn btn-danger mt-3 w-100" onClick={reset}>Reset</button>
+          <button className="btn btn-danger mt-3 w-100" onClick={reset}>
+           🔄 Reset
+          </button>
         </div>
       </div>
 
       {/* Explanation */}
       <div className="card w-100 my-4 shadow-sm">
         <div className="card-body text-start">
-          <h5 className="card-title">📘 Explanation</h5>
+          <h5 className="card-title">🧬 Explanation</h5>
           <p>
             Archimedes’ Principle states that any object, wholly or partially immersed in a fluid,
             is buoyed up by a force equal to the weight of the fluid displaced by the object.
@@ -199,7 +216,7 @@ export default function ArchimedesSimulation() {
       {/* Quiz */}
       <div className="card w-100 shadow-sm">
         <div className="card-body text-start">
-          <h5 className="card-title">📝 Quiz</h5>
+          <h5 className="card-title">🧠 Quiz</h5>
           <p>What determines if an object will float or sink in water?</p>
           <div className="form-check">
             <input
@@ -243,7 +260,9 @@ export default function ArchimedesSimulation() {
               Its density
             </label>
           </div>
-          <button className="btn btn-primary mt-2" onClick={handleQuiz}>Submit</button>
+          <button className="btn btn-primary mt-2" onClick={handleQuiz}>
+            Submit
+          </button>
           <div className="mt-2">{quizFeedback}</div>
         </div>
       </div>

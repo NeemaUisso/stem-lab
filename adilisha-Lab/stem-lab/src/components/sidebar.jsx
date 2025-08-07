@@ -22,22 +22,23 @@ import BiotechIcon from '@mui/icons-material/Biotech';
 
 const drawerWidth = 240;
 const subjects = [
-  { name: 'Robotics', icon: <MemoryIcon /> },
-  { name: 'Aviation', icon: <FlightIcon /> },
-  { name: 'Mathematics', icon: <FunctionsIcon /> },
-  { name: 'Coding', icon: <CodeIcon /> },
-  { name: 'Physics', icon: <BoltIcon /> },
-  { name: 'Chemistry', icon: <ScienceIcon /> },
-  { name: 'Biology', icon: <BiotechIcon /> },
+  { name: 'Robotics', icon: <MemoryIcon />, path: '/virtual-lab/robotics' },
+  { name: 'Aviation', icon: <FlightIcon />, path: '/virtual-lab/aviation' },
+  { name: 'Mathematics', icon: <FunctionsIcon />, path: '/virtual-lab/mathematics' },
+  { name: 'Coding', icon: <CodeIcon />, path: '/virtual-lab/coding' },
+  { name: 'Physics', icon: <BoltIcon />, path: '/virtual-lab/physics' },
+  { name: 'Chemistry', icon: <ScienceIcon />, path: '/virtual-lab/chemistry' },
+  { name: 'Biology', icon: <BiotechIcon />, path: '/virtual-lab/biology' },
 ];
+
 
 const Sidebar = ({ open, setOpen }) => {
   const navigate = useNavigate();
 
-  const handleNavigate = (subject) => {
-    const path = `/virtual-lab/${subject.toLowerCase()}`;
+  const handleNavigate = (path) => {
     navigate(path);
   };
+
 
   const toggleDrawer = () => {
     setOpen(!open); // Close if open, open if closed
@@ -75,7 +76,7 @@ const Sidebar = ({ open, setOpen }) => {
       </div>
       <Divider />
       <List>
-        {subjects.map(({ name, icon }) => (
+        {subjects.map(({ name, icon, path }) => (
           <ListItem key={name} disablePadding sx={{ display: 'block' }}>
             <ListItemButton
               sx={{
@@ -84,7 +85,7 @@ const Sidebar = ({ open, setOpen }) => {
                 px: 2.5,
                 color: '#fff',
               }}
-              onClick={() => handleNavigate(name)}
+              onClick={() => handleNavigate(path)}
             >
               <ListItemIcon
                 sx={{
@@ -102,6 +103,7 @@ const Sidebar = ({ open, setOpen }) => {
             </ListItemButton>
           </ListItem>
         ))}
+
       </List>
     </Drawer>
   );

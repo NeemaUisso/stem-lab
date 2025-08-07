@@ -16,6 +16,14 @@ import Sidebar from './components/sidebar';
 import RoleBasedRoute from './routes/RoleBasedRoute';
 import AdilishaCompetition from './pages/mashindano';
 import ArchimedesSimulation from './components/AchimedesSimulation';
+import StaticElectricity from './components/StaticElectricity';
+import RoboticsProject from './components/RoboticsProject';
+import PhysicsProjects from './components/PhysicsProjects';
+import ChemistryProjects from './components/ChemistryProjects';
+import BiologyProjects from './components/BiologyProjects';
+import AviationProjects from './components/AviationProjects';
+import MathematicsProjects from './components/MathematicsProjects';
+import CodingProjects from './components/CodingProjects';
 
 import './App.css';
 
@@ -68,6 +76,15 @@ const AppContent = () => {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/competition" element={<AdilishaCompetition />} />
+            <Route path="/physics/archimedes-principle" element={<ArchimedesSimulation />} />
+            <Route path="/physics/static-electricity" element={<StaticElectricity />} />
+            <Route path="/virtual-lab/robotics" element={<RoboticsProject />} />
+            <Route path="/virtual-lab/physics" element={<PhysicsProjects />} />
+            <Route path="/virtual-lab/chemistry" element={<ChemistryProjects />} />
+            <Route path="/virtual-lab/biology" element={<BiologyProjects />} />
+            <Route path="/virtual-lab/aviation" element={<AviationProjects />} />
+            <Route path="/virtual-lab/mathematics" element={<MathematicsProjects />} />
+            <Route path="/virtual-lab/coding" element={<CodingProjects />} />
           
 
 
@@ -79,7 +96,7 @@ const AppContent = () => {
                 path="/virtual-lab/practical/:id"
                 element={<ExperimentView />}
               />
-              <Route path="/physics" element={<ArchimedesSimulation />} />
+              
             </Route>
 
             {/* Instructor access */}
