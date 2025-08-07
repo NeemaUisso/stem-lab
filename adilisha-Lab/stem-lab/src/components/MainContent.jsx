@@ -168,8 +168,8 @@ const MainContent = () => {
                   </>
                 )}
               </div>
-            )}
-
+          )}
+        
             {/* Mobile Carousel */}
             {subjectCards[subject].length > 0 && (
               <div
@@ -228,11 +228,7 @@ const MainContent = () => {
                   </>
                 )}
               </div>
-            </div>
-          ))
-        ) : (
-          <div className="alert alert-info text-center">
-            No practicals found{subject ? ` for ${subject}` : ''}.
+            )}
           </div>
         ))}
       </div>

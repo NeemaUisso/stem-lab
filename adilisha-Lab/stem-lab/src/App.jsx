@@ -78,8 +78,15 @@ const AppContent = () => {
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/competition" element={<AdilishaCompetition />} />
             <Route path='/math-playground' element={<MathPlayground />} />
-          
-
+            <Route path="/physics/archimedes-principle" element={<ArchimedesSimulation />} />
+            <Route path="/physics/static-electricity" element={<StaticElectricity />} />
+            <Route path="/virtual-lab/robotics" element={<RoboticsProject />} />
+            <Route path="/virtual-lab/physics" element={<PhysicsProjects />} />
+            <Route path="/virtual-lab/chemistry" element={<ChemistryProjects />} />
+            <Route path="/virtual-lab/biology" element={<BiologyProjects />} />
+            <Route path="/virtual-lab/aviation" element={<AviationProjects />} />
+            <Route path="/virtual-lab/mathematics" element={<MathematicsProjects />} />
+            <Route path="/virtual-lab/coding" element={<CodingProjects />} />
 
             {/* Student access */}
             <Route element={<RoleBasedRoute minimumRole="student" />}>
