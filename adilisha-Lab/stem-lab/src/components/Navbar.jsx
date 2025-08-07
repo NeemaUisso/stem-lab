@@ -14,24 +14,27 @@ import { useAuth } from './Auth';
 const AppNavbar = ({ toggleSidebar }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { logout, role, user } = useAuth();
+  const { logout, user } = useAuth(); // We only need 'user' and 'logout' here
 
-  const isHomePage = location.pathname === '/';
   const isMainContent = location.pathname.startsWith('/virtual-lab') || location.pathname.startsWith('/subject');
-
+  
+  // This state is fine, but you could also simplify the logic below.
   const [scrolled, setScrolled] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
 
   useEffect(() => {
+    // We can simplify this logic since we want the background to be solid on all pages except the top of the homepage
     const handleScroll = () => {
-      setScrolled(isHomePage ? window.scrollY > 20 : true);
+      // The background is transparent only on the homepage when at the top.
+      const shouldBeScrolled = location.pathname === '/' ? window.scrollY > 20 : true;
+      setScrolled(shouldBeScrolled);
     };
     window.addEventListener('scroll', handleScroll);
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location]);
 
-  const appBarBgColor = isHomePage && !scrolled ? 'transparent' : '#2596be';
+  const appBarBgColor = location.pathname === '/' && !scrolled ? 'transparent' : '#2596be';
 
   const handleMenuOpen = (event) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
@@ -81,64 +84,65 @@ const AppNavbar = ({ toggleSidebar }) => {
           />
         </Box>
 
-        {/* Center links on large screen */}
-        {isHomePage && (
-          <Box
-            sx={{
-              display: { xs: 'none', md: 'flex' },
-              flexGrow: 1,
-              justifyContent: 'center',
-              gap: 2,
-            }}
-          >
-            <Button component={Link} to="/virtual-lab" sx={{ color: '#fff', textTransform: 'none' }}>
-              VIRTUAL LAB
-            </Button>
-            <Button href="#stem-club" sx={{ color: '#fff', textTransform: 'none' }}>
-              STEM CLUB
-            </Button>
-            <Button href="#faq" sx={{ color: '#fff', textTransform: 'none' }}>
-              FAQ
-            </Button>
-          </Box>
-        )}
+        {/* Center links - Always display on large screens */}
+        <Box
+          sx={{
+            display: { xs: 'none', md: 'flex' },
+            flexGrow: 1,
+            justifyContent: 'center',
+            gap: 2,
+          }}
+        >
+          <Button component={Link} to="/virtual-lab" sx={{ color: '#fff', textTransform: 'none' }}>
+            VIRTUAL LAB
+          </Button>
+          <Button href="#stem-club" sx={{ color: '#fff', textTransform: 'none' }}>
+            STEM CLUB
+          </Button>
+           <Button href="/competition" sx={{ color: '#fff', textTransform: 'none' }}>
+            COMPETITION
+          </Button>
+          <Button href="#faq" sx={{ color: '#fff', textTransform: 'none' }}>
+            FAQ
+          </Button>
+        </Box>
 
         <Box sx={{ flexGrow: 1 }} />
 
-        {/* Mobile menu toggle only on homepage */}
-        {isHomePage && (
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton onClick={handleMenuOpen} color="inherit">
-              <MenuIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            >
-              <MenuItem component={Link} to="/virtual-lab" onClick={handleMenuClose}>
-                Virtual Lab
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <a href="#stem-club" style={{ textDecoration: 'none', color: 'inherit' }}>
-                  STEM Club
-                </a>
-              </MenuItem>
-              <MenuItem onClick={handleMenuClose}>
-                <a href="#faq" style={{ textDecoration: 'none', color: 'inherit' }}>
-                  FAQ
-                </a>
-              </MenuItem>
-            </Menu>
-          </Box>
-        )}
+        {/* Mobile menu toggle - Always display on small screens */}
+        <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+          <IconButton onClick={handleMenuOpen} color="inherit">
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleMenuClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+          >
+            <MenuItem component={Link} to="/virtual-lab" onClick={handleMenuClose}>
+              Virtual Lab
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <a href="#stem-club" style={{ textDecoration: 'none', color: 'inherit' }}>
+                STEM Club
+              </a>
+            </MenuItem>
+            <MenuItem component={Link} to="/competition" onClick={handleMenuClose}>
+            COMPETITION
+            </MenuItem>
+            <MenuItem onClick={handleMenuClose}>
+              <a href="#faq" style={{ textDecoration: 'none', color: 'inherit' }}>
+                FAQ
+              </a>
+            </MenuItem>
+          </Menu>
+        </Box>
 
         {/* Auth section (Sign In / Logout) */}
         <Box sx={{ ml: 2 }}>
           {user ? (
-            
             <Button
               onClick={handleLogout}
               variant="outlined"

@@ -16,6 +16,7 @@ import Sidebar from './components/sidebar';
 import RoleBasedRoute from './routes/RoleBasedRoute';
 import AdilishaCompetition from './pages/mashindano';
 import MathPlayground from './pages/MathPlayground';
+import MashindanoForm from './components/mashindanoForm';
 import ArchimedesSimulation from './components/AchimedesSimulation';
 import StaticElectricity from './components/StaticElectricity';
 import RoboticsProject from './components/RoboticsProject';
@@ -78,6 +79,7 @@ const AppContent = () => {
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/competition" element={<AdilishaCompetition />} />
             <Route path='/math-playground' element={<MathPlayground />} />
+            <Route path="/mashindano-form" element={<MashindanoForm />} />
             <Route path="/physics/archimedes-principle" element={<ArchimedesSimulation />} />
             <Route path="/physics/static-electricity" element={<StaticElectricity />} />
             <Route path="/virtual-lab/robotics" element={<RoboticsProject />} />
