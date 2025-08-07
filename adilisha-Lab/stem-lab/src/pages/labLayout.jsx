@@ -9,7 +9,7 @@ const LabLayout = () => {
 
   // check authorization
   if (!user) {
-    return <Navigate to="/sign-in" replace />;
+    return <Navigate to="/signin" replace />;
   }
   // Get dynamic subject from URL
   const { subject } = useParams(); 

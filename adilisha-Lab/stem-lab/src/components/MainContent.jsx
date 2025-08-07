@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Flotation from '../pages/flotation';
 
 const MainContent = ({ subject }) => {
   const [practicals, setPracticals] = useState([]);
@@ -83,7 +82,6 @@ const MainContent = ({ subject }) => {
         ) : (
           <div className="alert alert-info text-center container">
             No practicals found{subject ? ` for ${subject}` : ''}.
-               <Flotation />
           </div>
         )}
       </div>

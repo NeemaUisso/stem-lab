@@ -14,8 +14,8 @@ import ExperimentView from './components/ExperimentView';
 import LabLayout from './pages/labLayout';
 import Sidebar from './components/sidebar';
 import RoleBasedRoute from './routes/RoleBasedRoute';
+import AdilishaCompetition from './pages/mashindano';
 import MathPlayground from './pages/MathPlayground';
-
 
 import './App.css';
 
@@ -29,7 +29,7 @@ const AppContent = () => {
     location.pathname.includes('/subject');
 
   const hideAsk =
-    location.pathname === '/sign-in' ||
+   
     location.pathname === '/signin' ||
     location.pathname === '/sign-up';
 
@@ -64,9 +64,13 @@ const AppContent = () => {
             />
 
             {/* Auth routes */}
-            <Route path="/sign-in" element={<SignIn />} />
+          
             <Route path="/signin" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/competition" element={<AdilishaCompetition />} />
+            <Route path='/math-playground' element={<MathPlayground />} />
+          
+
 
             {/* Student access */}
             <Route element={<RoleBasedRoute minimumRole="student" />}>
@@ -81,7 +85,6 @@ const AppContent = () => {
             {/* Instructor access */}
             <Route element={<RoleBasedRoute minimumRole="instructor" />}>
               <Route path="/upload-practical" element={<UploadPracticalForm />} />
-              <Route path='/math-playground' element={<MathPlayground />} />
             </Route>
           </Routes>
         </div>

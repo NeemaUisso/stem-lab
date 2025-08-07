@@ -1,14 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import bgImage from '../assets/biosampleV.JPG';
-import { Box, Typography, Grid, Card, CardActionArea, Tooltip } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Grid,
+  Card,
+  CardActionArea,
+  Tooltip,
+  useMediaQuery,
+  useTheme
+} from '@mui/material';
 import ScienceIcon from '@mui/icons-material/Science';
 import BiotechIcon from '@mui/icons-material/Biotech';
 import FunctionsIcon from '@mui/icons-material/Functions';
 import FlightIcon from '@mui/icons-material/Flight';
 import CodeIcon from '@mui/icons-material/Code';
 import MemoryIcon from '@mui/icons-material/Memory';
-import SchoolIcon from '@mui/icons-material/School';
 
 const subjects = [
   { name: 'Biology', icon: <BiotechIcon /> },
@@ -23,6 +31,10 @@ const subjects = [
 const spotlighted = ['Mathematics', 'Aviation', 'Coding', 'Robotics'];
 
 const Home = () => {
+  const theme = useTheme();
+  const isXs = useMediaQuery(theme.breakpoints.down('sm'));
+  const disableAnimations = useMediaQuery('(max-width:400px)');
+
   return (
     <Box
       sx={{
@@ -30,9 +42,9 @@ const Home = () => {
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         minHeight: '100vh',
-        padding: '3rem 3rem',
+        px: { xs: 2, sm: 4, md: 6 },
+        py: { xs: 4, sm: 6 },
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
@@ -41,17 +53,17 @@ const Home = () => {
       <Box
         sx={{
           backdropFilter: 'blur(6px)',
-          backgroundColor: 'rgba(255, 255, 255, 0.6)',
+          backgroundColor: 'rgba(255, 255, 255, 0.65)',
           borderRadius: '16px',
-          padding: '2rem',
+          p: { xs: 2, sm: 3, md: 4 },
           width: '100%',
           maxWidth: '1100px',
           boxShadow: '0 8px 20px rgba(0,0,0,0.2)',
-          animation: 'fadeSlideUp 1s ease-in-out',
+          animation: disableAnimations ? 'none' : 'fadeSlideUp 1s ease-in-out',
         }}
       >
         <Typography
-          variant="h4"
+          variant={isXs ? 'h5' : 'h4'}
           align="center"
           gutterBottom
           sx={{ color: '#003366', fontWeight: 'bold', mb: 4 }}
@@ -66,15 +78,26 @@ const Home = () => {
             const textColor = isSpotlight ? '#ffffff' : '#003366';
 
             return (
-              <Grid item xs={6} sm={4} md={3} key={subject.name}>
+              <Grid
+                item
+                xs={12} // 1 column on extra small
+                sm={6}  // 2 columns on small
+                md={4}  // 3 columns on medium
+                lg={3}  // 4 columns on large+
+                key={subject.name}
+                sx={{ display: 'flex', justifyContent: 'center' }}
+              >
                 <Tooltip title={`Explore ${subject.name}`} arrow>
-                  <Link to={`/virtual-lab/${subject.name.toLowerCase()}`} style={{ textDecoration: 'none' }}>
+                  <Link
+                    to={`/virtual-lab/${subject.name.toLowerCase()}`}
+                    style={{ textDecoration: 'none', width: '100%' }}
+                  >
                     <Card
                       sx={{
                         backgroundColor: bgColor,
                         color: textColor,
                         borderRadius: 2,
-                        minHeight: '100px',
+                        minHeight: { xs: '100px', sm: '110px', md: '120px' },
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
@@ -85,7 +108,9 @@ const Home = () => {
                         border: isSpotlight ? '2px solid #2596be' : 'none',
                         transition: 'all 0.6s ease-in-out',
                         opacity: 0.85,
-                        animation: `fadeSlideUp 0.4s infinite ease ${index * 0.15}s both, pulse 3s infinite ease-in-out`,
+                        animation: disableAnimations
+                          ? 'none'
+                          : `fadeSlideUp 0.4s ease ${index * 0.15}s both, pulse 3s infinite ease-in-out`,
                         '&:hover': {
                           transform: 'scale(1.08)',
                           opacity: 1,
@@ -93,12 +118,24 @@ const Home = () => {
                         },
                       }}
                     >
-                      <CardActionArea sx={{ p: 2 }}>
+                      <CardActionArea sx={{ p: { xs: 1.5, sm: 2 } }}>
                         <Box display="flex" flexDirection="column" alignItems="center">
                           {React.cloneElement(subject.icon, {
-                            sx: { fontSize: 30, color: textColor, mb: 1 },
+                            sx: {
+                              fontSize: { xs: 26, sm: 30 },
+                              color: textColor,
+                              mb: 1,
+                            },
                           })}
-                          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', color: textColor }}>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{
+                              fontWeight: 'bold',
+                              fontSize: { xs: '0.9rem', sm: '1rem' },
+                              color: textColor,
+                              textAlign: 'center',
+                            }}
+                          >
                             {subject.name}
                           </Typography>
                         </Box>
