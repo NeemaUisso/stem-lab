@@ -16,6 +16,15 @@ import Sidebar from './components/sidebar';
 import RoleBasedRoute from './routes/RoleBasedRoute';
 import AdilishaCompetition from './pages/mashindano';
 import MathPlayground from './pages/MathPlayground';
+import ArchimedesSimulation from './components/AchimedesSimulation';
+import StaticElectricity from './components/StaticElectricity';
+import RoboticsProject from './components/RoboticsProject';
+import PhysicsProjects from './components/PhysicsProjects';
+import ChemistryProjects from './components/ChemistryProjects';
+import BiologyProjects from './components/BiologyProjects';
+import AviationProjects from './components/AviationProjects';
+import MathematicsProjects from './components/MathematicsProjects';
+import CodingProjects from './components/CodingProjects';
 
 import './App.css';
 
@@ -80,11 +89,13 @@ const AppContent = () => {
                 path="/virtual-lab/practical/:id"
                 element={<ExperimentView />}
               />
+              
             </Route>
 
             {/* Instructor access */}
             <Route element={<RoleBasedRoute minimumRole="instructor" />}>
               <Route path="/upload-practical" element={<UploadPracticalForm />} />
+              
             </Route>
           </Routes>
         </div>
