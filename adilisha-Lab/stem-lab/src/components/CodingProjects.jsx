@@ -96,4 +96,4 @@ const CodingProjects = () => {
   );
 };
 
-export default CodingProjects;
+export default CodingProjects

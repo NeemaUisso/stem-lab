@@ -60,6 +60,8 @@ const hoverStyle = {
 };
 
 const MathematicsProjects = () => {
+  
+
   return (
     <div className="container py-5 mt-5">
       <h2 className="text-center mb-4">Mathematics Projects</h2>

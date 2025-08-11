@@ -11,6 +11,7 @@ import chemistryImage from '../assets/chemistry1.png';
 import staticImg from '../assets/staticImg.png'
 
 
+
 const subjects = [
   'Robotics', 'Aviation', 'Coding', 'Mathematics', 'Biology', 'Physics', 'Chemistry',
 ];
@@ -71,7 +72,7 @@ const subjectCards = {
     },
     {
       image: staticImg,
-      title: 'Static Electricity',
+      title: 'law of Flotation',
       description: 'Comb and Paper Experiment.',
       link: '/physics/static-electricity',
     },

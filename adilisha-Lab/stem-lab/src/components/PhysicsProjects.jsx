@@ -19,7 +19,7 @@ const physicsprojects = [
     link: "/physics/static-electricity",
   },
   {
-    title: "Archimedes Principle",
+    title: "Law of Flotation",
     description: "Discover buoyancy and displacement using water.",
     image: archImage,
     link: "/physics/archimedes-principle",
@@ -59,6 +59,8 @@ const hoverStyle = {
 };
 
 const PhysicsProjects = () => {
+  
+
   return (
     <div className="container py-5 mt-5">
       <h2 className="text-center mb-4">Physics Practicals</h2>
