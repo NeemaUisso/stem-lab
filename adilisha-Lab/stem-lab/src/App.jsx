@@ -26,7 +26,7 @@ import BiologyProjects from './components/BiologyProjects';
 import AviationProjects from './components/AviationProjects';
 import MathematicsProjects from './components/MathematicsProjects';
 import CodingProjects from './components/CodingProjects';
-import ClubRegistrationStep from './components/clubForm'
+import LawOfFlotation from './pages/flotation';
 
 import './App.css';
 
@@ -90,7 +90,7 @@ const AppContent = () => {
             <Route path="/virtual-lab/aviation" element={<AviationProjects />} />
             <Route path="/virtual-lab/mathematics" element={<MathematicsProjects />} />
             <Route path="/virtual-lab/coding" element={<CodingProjects />} />
-            <Route path='/club-form' element={<ClubRegistrationStep/>}/>
+            <Route path='/physics/law-of-flotation' element={<LawOfFlotation />} />
 
             {/* Student access */}
             <Route element={<RoleBasedRoute minimumRole="student" />}>

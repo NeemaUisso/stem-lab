@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import archImage from '../assets/archImage.png';
 import staticImg from '../assets/staticImg.png'
+import flotationImage from '../assets/flotation.png';
 
 
 const physicsprojects = [
@@ -19,10 +20,10 @@ const physicsprojects = [
     link: "/physics/static-electricity",
   },
   {
-    title: "Archimedes Principle",
-    description: "Discover buoyancy and displacement using water.",
-    image: archImage,
-    link: "/physics/archimedes-principle",
+    title: "Law of Flotation",
+    description: "How salt makes an Egg float.",
+    image: flotationImage,
+    link: "/physics/law-of-flotation",
   },
   {
     title: "Static Electricity",

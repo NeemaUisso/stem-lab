@@ -9,6 +9,7 @@ import mathImage from '../assets/math1.png';
 import biologyImage from '../assets/biology1.png';
 import chemistryImage from '../assets/chemistry1.png';
 import staticImg from '../assets/staticImg.png'
+import flotationImage from '../assets/flotation.png';
 
 
 const subjects = [
@@ -70,10 +71,10 @@ const subjectCards = {
       link: '/physics/static-electricity',
     },
     {
-      image: staticImg,
-      title: 'Static Electricity',
-      description: 'Comb and Paper Experiment.',
-      link: '/physics/static-electricity',
+      image: flotationImage,
+      title: 'Law of Flotation',
+      description: 'How salt makes an Egg float.',
+      link: '/physics/law-of-flotation',
     },
     {
       image: archImage,

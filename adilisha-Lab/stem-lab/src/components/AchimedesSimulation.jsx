@@ -75,7 +75,13 @@ export default function ArchimedesSimulation() {
       <h2 className="mb-4 text-primary"><strong>Archimedes' Principle Interactive Simulation</strong></h2>
 
       {/* Hint */}
-      <div className="alert alert-info w-100">
+      <div className="alert alert-info w-100"
+        style={{
+          border: "1px solid #b3d9e8",
+          borderRadius: 6,
+          color: "#003366",
+        }}
+        >
         💡 <strong>Hint:</strong> Objects that are denser than water will sink. Lighter objects float!
       </div>
 
