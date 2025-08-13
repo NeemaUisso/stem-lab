@@ -96,9 +96,12 @@ const AppNavbar = ({ toggleSidebar }) => {
           <Button component={Link} to="/virtual-lab" sx={{ color: '#fff', textTransform: 'none' }}>
             VIRTUAL LAB
           </Button>
-          <Button href="#stem-club" sx={{ color: '#fff', textTransform: 'none' }}>
+          <Button component={Link} to="/club-list" sx={{ color: '#fff', textTransform: 'none' }}>
             STEM CLUB
           </Button>
+          {/* <Button href="#stem-club" sx={{ color: '#fff', textTransform: 'none' }}>
+            STEM CLUB
+          </Button> */}
            <Button href="/competition" sx={{ color: '#fff', textTransform: 'none' }}>
             COMPETITION
           </Button>
@@ -124,11 +127,15 @@ const AppNavbar = ({ toggleSidebar }) => {
             <MenuItem component={Link} to="/virtual-lab" onClick={handleMenuClose}>
               Virtual Lab
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>
+            {/* <MenuItem onClick={handleMenuClose}>
               <a href="#stem-club" style={{ textDecoration: 'none', color: 'inherit' }}>
                 STEM Club
               </a>
+            </MenuItem> */}
+             <MenuItem component={Link} to="/competition" onClick={handleMenuClose}>
+            STEM ClUB
             </MenuItem>
+            <MenuItem onClick={handleMenuClose}></MenuItem>
             <MenuItem component={Link} to="/competition" onClick={handleMenuClose}>
             COMPETITION
             </MenuItem>
