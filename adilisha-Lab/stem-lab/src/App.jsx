@@ -29,6 +29,7 @@ import CodingProjects from './components/CodingProjects';
 import LawOfFlotation from './pages/flotation';
 
 import './App.css';
+import HardnessPractical from './pages/hardnessWater';
 
 const AppContent = () => {
   const location = useLocation();
@@ -91,6 +92,7 @@ const AppContent = () => {
             <Route path="/virtual-lab/mathematics" element={<MathematicsProjects />} />
             <Route path="/virtual-lab/coding" element={<CodingProjects />} />
             <Route path='/physics/law-of-flotation' element={<LawOfFlotation />} />
+            <Route path="/chemistry/hardness-of-water" element={<HardnessPractical />} />
 
             {/* Student access */}
             <Route element={<RoleBasedRoute minimumRole="student" />}>
