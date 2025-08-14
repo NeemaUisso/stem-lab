@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
 import archImage from '../assets/archImage.png';
 import staticImg from '../assets/staticImg.png'
+import flotationImage from '../assets/flotation.png';
 
 
 const physicsprojects = [
@@ -20,9 +21,9 @@ const physicsprojects = [
   },
   {
     title: "Law of Flotation",
-    description: "Discover buoyancy and displacement using water.",
-    image: archImage,
-    link: "/physics/archimedes-principle",
+    description: "How salt makes an Egg float.",
+    image: flotationImage,
+    link: "/physics/law-of-flotation",
   },
   {
     title: "Static Electricity",
@@ -84,9 +85,10 @@ const PhysicsProjects = () => {
                     objectFit: "cover",
                     borderTopLeftRadius: "1rem",
                     borderTopRightRadius: "1rem",
+                    
                   }}
                 />
-                <div className="card-body">
+                <div className="card-body" style={{backgroundColor: "#2596be", borderBottomRightRadius: "1rem", borderBottomLeftRadius: "1rem"}}>
                   <h5 className="card-title">{project.title}</h5>
                   <p className="card-text">{project.description}</p>
                 </div>

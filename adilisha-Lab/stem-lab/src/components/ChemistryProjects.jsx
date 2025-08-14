@@ -6,10 +6,10 @@ import chemistryImage from '../assets/chemistry1.png';
 
 const chemistryprojects = [
   {
-    title: "Acid-Base Reaction",
+    title: "Acid-Base Titration",
     description: "Observe color changes in litmus as pH varies.",
     image: chemistryImage,
-    link: "/practicals/chemistry1",
+    link: "/practicals/AcidBaseTitration",
   },
   {
     title: "Acid-Base Reaction",

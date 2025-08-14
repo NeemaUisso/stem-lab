@@ -26,6 +26,8 @@ import BiologyProjects from './components/BiologyProjects';
 import AviationProjects from './components/AviationProjects';
 import MathematicsProjects from './components/MathematicsProjects';
 import CodingProjects from './components/CodingProjects';
+import LawOfFlotation from './pages/flotation';
+import AcidBaseTitration from './components/AcidBaseTitration';
 
 import './App.css';
 
@@ -89,6 +91,8 @@ const AppContent = () => {
             <Route path="/virtual-lab/aviation" element={<AviationProjects />} />
             <Route path="/virtual-lab/mathematics" element={<MathematicsProjects />} />
             <Route path="/virtual-lab/coding" element={<CodingProjects />} />
+            <Route path='/physics/law-of-flotation' element={<LawOfFlotation />} />
+            <Route path='/practicals/AcidBaseTitration' element={<AcidBaseTitration />} />
 
             {/* Student access */}
             <Route element={<RoleBasedRoute minimumRole="student" />}>

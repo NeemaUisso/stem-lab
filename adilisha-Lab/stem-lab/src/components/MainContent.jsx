@@ -10,6 +10,7 @@ import biologyImage from '../assets/biology1.png';
 import chemistryImage from '../assets/chemistry1.png';
 import staticImg from '../assets/staticImg.png'
 
+import flotationImage from '../assets/flotation.png';
 
 
 const subjects = [
@@ -72,7 +73,7 @@ const subjectCards = {
     },
     {
       image: staticImg,
-      title: 'law of Flotation',
+      title: 'Static Electricity',
       description: 'Comb and Paper Experiment.',
       link: '/physics/static-electricity',
     },
@@ -95,7 +96,7 @@ const subjectCards = {
 
 const MainContent = () => {
   return (
-    <div className="flex-grow-1 pt-5">
+    <div className="pt-5">
       <div className="container py-4">
         {subjects.map((subject, idx) => (
           <div key={idx} className="mb-5">
@@ -123,19 +124,25 @@ const MainContent = () => {
                             <div className="col-lg-4" key={imgIdx}>
                               <Link
                                 to={card.link}
-                                className="text-decoration-none text-dark"
+                                className="text-decoration-none text-light"
                               >
-                                <div className="card h-100 shadow rounded border-0 transition hover-shadow">
+                                <div className="card h-100 border-0 transition hover-shadow">
                                   <img
                                     src={card.image}
                                     className="card-img-top rounded-top"
                                     alt={card.title}
+                                    style={{
+                                    height: "220px",
+                                    objectFit: "cover",
+                                    borderTopLeftRadius: "1rem",
+                                    borderTopRightRadius: "1rem",
+                                  }}
                                   />
-                                  <div className="card-body">
-                                    <h5 className="card-title fw-semibold">
+                                  <div className="card-body" style={{backgroundColor: "#2596be", borderBottomRightRadius: "1rem", borderBottomLeftRadius: "1rem"}}>
+                                    <h5 className="card-title fw-bold text-light">
                                       {card.title}
                                     </h5>
-                                    <p className="card-text text-muted small">
+                                    <p className="card-text text-muted small text-light">
                                       {card.description}
                                     </p>
                                   </div>
@@ -186,19 +193,25 @@ const MainContent = () => {
                     >
                       <Link
                         to={card.link}
-                        className="text-decoration-none text-dark"
+                        className="text-decoration-none text-light"
                       >
                         <div className="card shadow rounded border-0">
                           <img
                             src={card.image}
                             className="card-img-top rounded-top"
                             alt={card.title}
+                            style={{
+                            height: "220px",
+                            objectFit: "cover",
+                            borderTopLeftRadius: "1rem",
+                            borderTopRightRadius: "1rem",
+                          }}
                           />
-                          <div className="card-body">
-                            <h5 className="card-title fw-semibold">
+                          <div className="card-body" style={{backgroundColor: "#2596be", borderBottomRightRadius: "1rem", borderBottomLeftRadius: "1rem"}}>
+                            <h5 className="card-title fw-bold text-light">
                               {card.title}
                             </h5>
-                            <p className="card-text text-muted small">
+                            <p className="card-text text-muted small text-light">
                               {card.description}
                             </p>
                           </div>
