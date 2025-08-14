@@ -14,6 +14,7 @@ import getpracticalsRoutes from './Routes/practicals.route.js';
 import practicalRoutes from './Routes/practicalRoutes.js';
 import userRoutes from './Routes/user.Routes.js';
 import competitionRoutes from './Routes/competitionRoutes.js';
+import clubRoutes from './Routes/clubRoute.js';
 
 
 
@@ -35,6 +36,8 @@ app.use('/api',getpracticalsRoutes);
 app.use('/api/practicals', practicalRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/competition', competitionRoutes);
+app.use('/api/clubs',clubRoutes);
+
 
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on http://localhost:${PORT}`);

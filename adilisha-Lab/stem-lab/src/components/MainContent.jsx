@@ -9,9 +9,7 @@ import mathImage from '../assets/math1.png';
 import biologyImage from '../assets/biology1.png';
 import chemistryImage from '../assets/chemistry1.png';
 import staticImg from '../assets/staticImg.png'
-
 import flotationImage from '../assets/flotation.png';
-
 
 const subjects = [
   'Robotics', 'Aviation', 'Coding', 'Mathematics', 'Biology', 'Physics', 'Chemistry',
@@ -19,6 +17,18 @@ const subjects = [
 
 const subjectCards = {
   Robotics: [
+    {
+      image: robotImage,
+      title: 'Line Following Robot',
+      description: 'Build a robot that follows a line using IR sensors.',
+      link: '/practicals/robotics1',
+    },
+    {
+      image: robotImage,
+      title: 'Line Following Robot',
+      description: 'Build a robot that follows a line using IR sensors.',
+      link: '/practicals/robotics1',
+    },
     {
       image: robotImage,
       title: 'Line Following Robot',
@@ -33,8 +43,32 @@ const subjectCards = {
       description: 'Learn how wing shape affects flight distance.',
       link: '/practicals/aviation1',
     },
+    {
+      image: aviationImage,
+      title: 'Paper Plane Aerodynamics',
+      description: 'Learn how wing shape affects flight distance.',
+      link: '/practicals/aviation1',
+    },
+    {
+      image: aviationImage,
+      title: 'Paper Plane Aerodynamics',
+      description: 'Learn how wing shape affects flight distance.',
+      link: '/practicals/aviation1',
+    },
   ],
   Coding: [
+    {
+      image: codeImage,
+      title: 'Simple Calculator App',
+      description: 'Create a calculator using HTML, CSS, and JavaScript.',
+      link: '/practicals/coding1',
+    },
+    {
+      image: codeImage,
+      title: 'Simple Calculator App',
+      description: 'Create a calculator using HTML, CSS, and JavaScript.',
+      link: '/practicals/coding1',
+    },
     {
       image: codeImage,
       title: 'Simple Calculator App',
@@ -49,8 +83,32 @@ const subjectCards = {
       description: 'Explore right-angled triangles using interactive tools.',
       link: '/practicals/mathematics1',
     },
+    {
+      image: mathImage,
+      title: 'Pythagorean Theorem',
+      description: 'Explore right-angled triangles using interactive tools.',
+      link: '/practicals/mathematics1',
+    },
+    {
+      image: mathImage,
+      title: 'Pythagorean Theorem',
+      description: 'Explore right-angled triangles using interactive tools.',
+      link: '/practicals/mathematics1',
+    },
   ],
   Biology: [
+    {
+      image: biologyImage,
+      title: 'Microscope Exploration',
+      description: 'Identify plant and animal cells under a microscope.',
+      link: '/practicals/biology1',
+    },
+    {
+      image: biologyImage,
+      title: 'Microscope Exploration',
+      description: 'Identify plant and animal cells under a microscope.',
+      link: '/practicals/biology1',
+    },
     {
       image: biologyImage,
       title: 'Microscope Exploration',
@@ -72,24 +130,31 @@ const subjectCards = {
       link: '/physics/static-electricity',
     },
     {
-      image: staticImg,
-      title: 'Static Electricity',
-      description: 'Comb and Paper Experiment.',
-      link: '/physics/static-electricity',
-    },
-    {
-      image: archImage,
+      image: flotationImage,
       title: 'Law of Flotation',
-      description: 'Salt, Water and egg Experiment.',
-      link: '/physics/static-electricity',
+      description: 'How salt makes an Egg float.',
+      link: '/physics/law-of-flotation',
     },
+    
   ],
   Chemistry: [
     {
       image: chemistryImage,
       title: 'Acid-Base Reaction',
       description: 'Observe color changes in litmus as pH varies.',
-      link: '/practicals/chemistry1',
+      link: '/practicals/AcidBaseTitration',
+    },
+    {
+      image: chemistryImage,
+      title: 'Acid-Base Reaction',
+      description: 'Observe color changes in litmus as pH varies.',
+      link: '/practicals/AcidBaseTitration',
+    },
+    {
+      image: chemistryImage,
+      title: 'Acid-Base Reaction',
+      description: 'Observe color changes in litmus as pH varies.',
+      link: '/practicals/AcidBaseTitration',
     },
   ],
 };

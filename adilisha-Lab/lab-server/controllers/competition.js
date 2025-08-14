@@ -3,23 +3,20 @@ import Club from '../models/club.js';
 import Team from '../models/projects.js';
 import multer from 'multer';
 
+
 export const club = async (req, res) => {
   try {
-    const {
-      schoolName,
-      clubInstructor,   
-      email,
-      contactNumber,     
-      region,
-      numberOfTeams,
-    } = req.body;
+    const { schoolName, clubInstructor, email, contactNumber, region, numberOfTeams } = req.body;
 
-    // Validate required fields
-    if (!schoolName || !clubInstructor || !email || !contactNumber || !region || !numberOfTeams) {
-      return res.status(400).json({ error: 'All fields are required' });
+    
+console.log("req.user:", req.user);
+
+    // Prevent multiple clubs for same user
+    const existingClub = await Club.findOne({ user: req.user.userId });
+    if (existingClub) {
+      return res.status(400).json({ message: 'You have already registered a club.' });
     }
 
-    // Create new club document
     const newClub = new Club({
       schoolName,
       clubInstructor,
@@ -27,61 +24,74 @@ export const club = async (req, res) => {
       contactNumber,
       region,
       numberOfTeams,
+      user: req.user.userId 
     });
 
-    await newClub.save();
-
-    // Send success response
-    res.status(201).json({
-      message: 'Club created successfully',
-      clubId: newClub._id,
-    });
-  } catch (error) {
-    console.error('Error creating club:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    const savedClub = await newClub.save();
+    res.status(201).json({ clubId: savedClub._id, message: 'Club registered successfully' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error while creating club' });
   }
 };
 
 
-export  const projectCompetition = async (req, res) => {
 
- const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, 'uploads/'),
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
-  },
-});
 
-const upload = multer({ storage });
-
+export const projectCompetition = async (req, res) => {
   try {
-    const { clubId, teamName, projectTitle, projectCategory, projectDescription, teamMembers, videoLink, document, image } = req.body;
-
-    // Hakikisha: maelezo yote muhimu yapo
-    if (!clubId || !teamName || !projectTitle || !projectCategory || !projectDescription || !teamMembers) {
-      return res.status(400).json({ error: 'All fields are required' });
+    // Find the club linked to the logged-in user
+    const club = await Club.findOne({ user: req.user.id });
+    if (!club) {
+      return res.status(400).json({ error: 'You must register a club before adding a team.' });
     }
 
-    // Unda timu mpya
+    const { teamName, projectTitle, projectCategory, projectDescription, teamMembers, videoLink } = req.body;
+
+    // Validate required fields
+    if (!teamName || !projectTitle || !projectCategory || !projectDescription || !teamMembers) {
+      return res.status(400).json({ error: 'All fields are required.' });
+    }
+
+    // Parse teamMembers if sent as JSON string
+    let membersArray = [];
+    try {
+      membersArray = typeof teamMembers === 'string' ? JSON.parse(teamMembers) : teamMembers;
+    } catch {
+      membersArray = [];
+    }
+
+    // Create new team
     const newTeam = new Team({
-      clubId,
+      club: club._id,
       teamName,
       projectTitle,
       projectCategory,
       projectDescription,
-      teamMembers,
+      teamMembers: membersArray,
       videoLink,
-      document,
-      image,
+      document: req.file ? req.file.filename : null, 
     });
 
     await newTeam.save();
 
-    // Jibu na taarifa ya mafanikio
     res.status(201).json({ message: 'Team created successfully', teamId: newTeam._id });
   } catch (error) {
     console.error('Error creating team:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
-}
+};
+
+export const getMyClub = async (req, res) => {
+  try {
+    const club = await Club.findOne({ user: req.user.id }).select('_id schoolName');
+    if (!club) {
+      return res.status(404).json({ message: 'No club found for this user' });
+    }
+
+    res.status(200).json({ clubId: club._id, schoolName: club.schoolName });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error while fetching club' });
+  }
+};
