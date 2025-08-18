@@ -27,6 +27,7 @@ import AviationProjects from './components/AviationProjects';
 import MathematicsProjects from './components/MathematicsProjects';
 import CodingProjects from './components/CodingProjects';
 import LawOfFlotation from './pages/flotation';
+import ClubList from './components/stem-club';
 
 import './App.css';
 import HardnessPractical from './pages/hardnessWater';
@@ -83,6 +84,7 @@ const AppContent = () => {
             <Route path='/math-playground' element={<MathPlayground />} />
             <Route path="/mashindano-form" element={<MashindanoForm />} />
             <Route path="/physics/archimedes-principle" element={<ArchimedesSimulation />} />
+            <Route path='/club-list' element={<ClubList/>}/>
             <Route path="/physics/static-electricity" element={<StaticElectricity />} />
             <Route path="/virtual-lab/robotics" element={<RoboticsProject />} />
             <Route path="/virtual-lab/physics" element={<PhysicsProjects />} />
@@ -101,7 +103,7 @@ const AppContent = () => {
               <Route
                 path="/virtual-lab/practical/:id"
                 element={<ExperimentView />}
-              />
+              /> 
               
             </Route>
 
