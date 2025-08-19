@@ -26,11 +26,15 @@ function FAQ() {
     whiteSpace: 'nowrap',
     position: 'relative',
     marginBottom: '40px',
+    padding: 0,
+    width: '100%',
   };
 
   const scrollerStyle = {
     display: 'inline-flex',
-    animation: 'scrollLeft 30s linear infinite',
+    animation: 'scrollLeft 10s linear infinite',
+    padding: 0,
+    width: '100%',
   };
 
   const faqCardStyle = {
@@ -49,11 +53,15 @@ function FAQ() {
   };
 
   return (
-    <div className="container my-5">
-      <h2 className="text-center mb-4">Frequently Asked Questions</h2>
+    <div className="my-5">
+      {/* Title in normal container */}
+      <div className="container">
+        <h2 className="text-center mb-4">Frequently Asked Questions</h2>
+      </div>
 
-      {/* Scrolling FAQ wrapper */}
+      {/* Full-width scroller */}
       <div
+        className="container-fluid px-0"
         style={wrapperStyle}
         onMouseEnter={(e) =>
           (e.currentTarget.querySelector('.scroller').style.animationPlayState = 'paused')

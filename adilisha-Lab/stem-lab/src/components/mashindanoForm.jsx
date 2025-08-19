@@ -188,4 +188,6 @@ const MashindanoForm = () => {
   );
 };
 
+
 export default MashindanoForm;
+

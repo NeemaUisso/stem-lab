@@ -70,8 +70,8 @@ const AppContent = () => {
                     <div id="stem-club">
                       <StemClub />
                     </div>
+                    <Footer />
                   </div>
-                  <Footer />
                 </div>
               }
             />
