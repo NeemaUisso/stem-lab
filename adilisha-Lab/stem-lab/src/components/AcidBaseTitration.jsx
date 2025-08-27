@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { DndProvider, useDrag, useDrop } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
@@ -62,8 +63,8 @@ function Dropper({ dropper, onClear }) {
   const imgSrc = dropper.currentVolume > 0 ? dropper_filled : dropper_empty;
 
   return (
-    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1, cursor: 'grab', touchAction: 'none' }}>
-      <img src={imgSrc} alt="dropper" style={{ width: 120, maxWidth: '100%' }} />
+    <div ref={drag} style={{ opacity: isDragging ? 0.5 : 1, cursor: 'grab', touchAction: 'none' }} className="dropper">
+      <img src={imgSrc} alt="dropper" style={{ width: 120, maxWidth: '100%', height: 'auto' }} />
       <div className="text-center small mt-1">
         <strong>Dropper</strong>
         <div>{dropper.currentVolume.toFixed(1)} ml</div>
@@ -129,11 +130,11 @@ function Container({ id, label, container, onDropperDrop, onSourceDrop, onQuizTr
   if (overflow) onQuizTrigger?.();
 
   return (
-    <div className="col-12 col-sm-6 col-md-4 text-center mb-4">
+    <div className=" col-4 text-center mb-4">
       <h5>{label}</h5>
-      <div ref={drop} style={{ position: 'relative', width: '100%', maxWidth: 160, height: 220, margin: '0 auto' }}>
+      <div ref={drop} className="beaker" style={{ position: 'relative', width: '100%', maxWidth: 160, height: 220, margin: '0 auto' }}>
         <img src={beaker} alt={label} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-        <div style={{
+        <div className="liquid" style={{
           position: 'absolute',
           bottom: 15,
           left: 5,
@@ -153,6 +154,7 @@ function Container({ id, label, container, onDropperDrop, onSourceDrop, onQuizTr
         <LitmusPaper pH={pH} />
       </div>
     </div>
+
   );
 }
 
@@ -166,21 +168,15 @@ export default function AcidBaseTitration() {
 
   const dropperCapacity = 5;
   const [dropper, setDropper] = useState({ currentVolume: 0, acidVol: 0, baseVol: 0 });
-  const [feedback, setFeedback] = useState('');
+  const [simfeedback, setSimFeedback] = useState('');  // kwa actions za drag & drop
+
+   const [quizFeedback, setQuizFeedback] = useState(""); // kwa quiz pekee
+
   const [quiz, setQuiz] = useState(null);
 
-  const questions = [
-    {
-      question: "Which container is most acidic?",
-      options: ["Beaker", "Test Tube", "Flask", "All equal"],
-      answer: "Beaker"
-    },
-    {
-      question: "What pH indicates a basic solution?",
-      options: ["<7", "=7", ">7", "None"],
-      answer: ">7"
-    }
-  ];
+  const handleQuizTrigger = () => {
+  setQuiz(questions[0]); // show first quiz
+};
 
   const handleDropperOnContainer = useCallback((containerId) => {
     setContainers(prev => {
@@ -196,7 +192,7 @@ export default function AcidBaseTitration() {
         const newContainer = { acidVol: target.acidVol - acidTaken, baseVol: target.baseVol - baseTaken };
         setDropper({ currentVolume: amountToTake, acidVol: acidTaken, baseVol: baseTaken });
         newFeedback = `Picked up ${amountToTake.toFixed(1)}ml from ${containerId}`;
-        setFeedback(newFeedback);
+        setSimFeedback(newFeedback);
         return { ...prev, [containerId]: newContainer };
       }
 
@@ -206,7 +202,7 @@ export default function AcidBaseTitration() {
       };
       setDropper({ currentVolume: 0, acidVol: 0, baseVol: 0 });
       newFeedback = `Poured ${dropper.currentVolume.toFixed(1)}ml into ${containerId}`;
-      setFeedback(newFeedback);
+      setSimFeedback(newFeedback);
       return { ...prev, [containerId]: newContainer };
     });
   }, [dropper]);
@@ -219,7 +215,7 @@ export default function AcidBaseTitration() {
         ? { ...prev, [containerId]: { acidVol: t.acidVol + added, baseVol: t.baseVol } }
         : { ...prev, [containerId]: { acidVol: t.acidVol, baseVol: t.baseVol + added } };
     });
-    setFeedback(`${kind.charAt(0).toUpperCase() + kind.slice(1)} added to ${containerId}`);
+    setSimFeedback(`${kind.charAt(0).toUpperCase() + kind.slice(1)} added to ${containerId}`);
   }, []);
 
   const clearDropper = () => setDropper({ currentVolume: 0, acidVol: 0, baseVol: 0 });
@@ -230,30 +226,102 @@ export default function AcidBaseTitration() {
       flask: { acidVol: 0, baseVol: 0 },
     });
     clearDropper();
-    setFeedback('');
+    setSimFeedback('');
     setQuiz(null);
   };
 
-  const handleQuizTrigger = () => {
-    setQuiz(questions[0]); // show first quiz
+     const [selected, setSelected] = useState("");  // choice ya user
+      
+
+  const correctAnswer = "blue";
+
+  const handleSubmit = () => {
+
+    if (!selected) {
+      setQuizFeedback("⚠️ Please select answer.");
+      return;
+    }
+    if (selected === correctAnswer) {
+      setQuizFeedback("✅ Correct! A base turns red litmus paper blue.");
+    } else {
+      setQuizFeedback("❌ Incorrect! Try again.");
+    }
+
   };
 
-  const handleAnswer = (option) => {
-    if (!quiz) return;
-    const isCorrect = option === quiz.answer;
-    setFeedback(isCorrect ? '✅ Correct!' : `❌ Incorrect! Correct answer: ${quiz.answer}`);
-    // Move to next question or hide quiz
-    const nextIndex = questions.indexOf(quiz) + 1;
-    setQuiz(nextIndex < questions.length ? questions[nextIndex] : null);
-  };
+  const navigate = useNavigate();
+        const goBack = () => {
+          if (window.history.length > 1) {
+            navigate(-1); // jaribu kurudi history
+          } else {
+            navigate("/virtual-lab"); // fallback page
+          }
+        };
 
   return (
     <DndProvider backend={MultiBackend} options={HTML5toTouch}>
       <div className="container my-4 pt-5">
-        <h2 className="text-center mb-3">Acid-Base Titration — Drag & Drop Simulation</h2>
+
+      <div className="d-flex align-items-center mb-4">
+          {/* Back Button */}
+          <button onClick={goBack} className="btn btn-outline-secondary me-3">
+            ⬅
+          </button>
+
+          {/* Title */}
+          <h2 className="mb-0 text-primary fs-3">
+           <strong>Acid-Base Titration — Drag & Drop Simulation</strong>
+          </h2>
+        </div>
+
+        {/* Hint */}
+      <div className="alert alert-info w-100"
+        style={{
+          border: "1px solid #b3d9e8",
+          borderRadius: 6,
+          color: "#003366",
+        }}
+        >
+        💡 <strong>Hint:</strong> Use litmus paper to test acidity or basicity: acid turns blue litmus red, base turns red litmus blue!.
+      </div>
+
+      {/* Steps & Procedure Dropdown */}
+      <div className="accordion w-100 mb-4 shadow-sm" id="procedureAccordion">
+        <div className="accordion-item">
+          <h2 className="accordion-header" id="headingOne">
+            <button
+              className="accordion-button collapsed"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="false"
+              aria-controls="collapseOne"
+            >
+              🧪 Steps & Procedure
+            </button>
+          </h2>
+          <div
+            id="collapseOne"
+            className="accordion-collapse collapse"
+            aria-labelledby="headingOne"
+            data-bs-parent="#procedureAccordion"
+          >
+            <div className="accordion-body text-start">
+              <ol>
+                <li>Start with a beaker containing acid.</li>
+                <li>Use the dropper to transfer acid or base into other containers.</li>
+                <li>If you add acid, the litmus paper will turn red.</li>
+                <li>If you add base, the litmus paper will turn blue.</li>
+                <li>Continue adding until you see neutralization (litmus paper may show no clear color change).</li>
+                <li>Record your observations and Click reset to start again.</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
 
         <div className="row mb-3 text-center">
-          <div className="col-12 col-md-4 mb-3">
+          <div className="col-4 mb-3">
             <strong>Source Bottles</strong>
             <div className="d-flex justify-content-around mt-2">
               <SourceBottle kind="acid" />
@@ -262,13 +330,13 @@ export default function AcidBaseTitration() {
             <small className="text-muted">Drag bottles to containers.</small>
           </div>
 
-          <div className="col-12 col-md-4 mb-3">
+          <div className="col-4 mb-3">
             <strong>Your Dropper (drag me)</strong>
             <Dropper dropper={dropper} onClear={clearDropper} />
             <small className="text-muted d-block mt-2">Capacity: {dropperCapacity} ml</small>
           </div>
 
-          <div className="col-12 col-md-4 mb-3">
+          <div className="col-4 mb-3">
             <strong>Actions</strong>
             <div>
               <button className="btn btn-sm btn-outline-secondary mt-2" onClick={() => {
@@ -281,9 +349,9 @@ export default function AcidBaseTitration() {
                   }
                   return next;
                 });
-                setFeedback('All containers neutralized');
+                setSimFeedback('All containers neutralized');
               }}>Auto-mix</button>
-              <button className="btn btn-sm btn-danger mt-2 ms-2" onClick={resetAll}>Reset</button>
+              <button className="btn btn-sm btn-danger mt-2 ms-2" onClick={resetAll}>🔄 Reset</button>
             </div>
           </div>
         </div>
@@ -294,19 +362,65 @@ export default function AcidBaseTitration() {
           <Container id="flask" label="Flask" container={containers.flask} onDropperDrop={handleDropperOnContainer} onSourceDrop={handleSourceOnContainer} onQuizTrigger={handleQuizTrigger} />
         </div>
 
-        {feedback && <div className="alert alert-info mt-3 text-center">{feedback}</div>}
+       {/* EXPLANATION SECTION */}
+      <div className="card mt-4 shadow-sm">
+        <div className="card-body text-start">
+          <h5 className="card-title">🧬 Explanation</h5>
+          <p className="card-text">
+            In this experiment, we use litmus paper to test acidic and basic solutions. 
+            An <b>acid</b> turns blue litmus paper red, while a <b>base</b> turns red litmus paper blue. 
+            Neutral solutions do not change the color of litmus paper.
+          </p>
+        </div>
+      </div>
 
-        {quiz && (
-          <div className="alert alert-warning mt-3">
-            <h5>{quiz.question}</h5>
-            <div className="d-flex flex-wrap gap-2 mt-2">
-              {quiz.options.map(opt => (
-                <button key={opt} className="btn btn-sm btn-outline-primary" onClick={() => handleAnswer(opt)}>{opt}</button>
-              ))}
-            </div>
+      {/* QUIZ SECTION */}
+      <div className="card mt-4 shadow-sm">
+        <div className="card-body text-start">
+          <h5 className="card-title">🧠 Quiz</h5>
+          
+          <p>1. What color does red litmus turn in a base?</p>
+          <div onChange={(e) => setSelected(e.target.value)}>
+            <input type="radio" id="q1a" name="q1" value="red" />
+            <label htmlFor="q1a" className="ms-2">Red</label><br/>
+            <input type="radio" id="q1b" name="q1" value="blue" />
+            <label htmlFor="q1b" className="ms-2">Blue</label><br/>
+            <input type="radio" id="q1c" name="q1" value="green" />
+            <label htmlFor="q1c" className="ms-2">Green</label>
+          </div>
+
+          <button className="btn btn-primary" onClick={handleSubmit}>Submit Answer</button>
+
+          {quizFeedback && (
+          <div className="mt-2 alert alert-info">
+            {quizFeedback}
           </div>
         )}
+
+        </div>
       </div>
+    
+      </div>
+
+      <style>
+        {`
+          @media (max-width: 768px) {
+            .beaker {
+              max-width: 100px !important;
+              height: 150px !important;
+            }
+            .beaker .liquid {
+              left: 4px !important;
+              right: 4px !important;
+              bottom: 16px !important;
+              border-radius: 15px !important;
+            }
+            .dropper img {
+              width: 70px !important;
+            }
+          }
+        `}
+      </style>
     </DndProvider>
   );
 }

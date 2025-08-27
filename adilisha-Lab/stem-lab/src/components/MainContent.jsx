@@ -165,7 +165,7 @@ const MainContent = () => {
       <div className="container py-4">
         {subjects.map((subject, idx) => (
           <div key={idx} className="mb-5">
-            <h4 className="mb-3 fw-bold text-primary">{subject}</h4>
+            <h4 className="mb-3 fw-bold" style={{color: '#003366'}}>{subject}</h4>
 
             {/* Desktop Carousel */}
             {subjectCards[subject].length > 0 && (

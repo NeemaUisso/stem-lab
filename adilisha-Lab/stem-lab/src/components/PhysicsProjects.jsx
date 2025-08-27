@@ -63,8 +63,8 @@ const PhysicsProjects = () => {
   
 
   return (
-    <div className="container py-5 mt-5">
-      <h2 className="text-center mb-4">Physics Practicals</h2>
+    <div className="container py-5 mt-3 mb-3">
+      <h2 className="text-center mb-4" style={{color: '#003366'}}>Physics Practicals</h2>
       <div className="row g-4">
         {physicsprojects.map((project, index) => (
           <div className="col-12 col-sm-6 col-lg-4 d-flex" key={index}>
@@ -89,7 +89,7 @@ const PhysicsProjects = () => {
                   }}
                 />
                 <div className="card-body" style={{backgroundColor: "#2596be", borderBottomRightRadius: "1rem", borderBottomLeftRadius: "1rem"}}>
-                  <h5 className="card-title">{project.title}</h5>
+                  <h5 className="card-title text-white">{project.title}</h5>
                   <p className="card-text">{project.description}</p>
                 </div>
               </div>

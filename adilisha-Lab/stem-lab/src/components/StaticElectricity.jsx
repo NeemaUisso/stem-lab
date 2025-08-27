@@ -1,10 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import combImg from "../assets/comb.png";
 import paperImg from "../assets/paper.png";
 import hairImg from "../assets/hair.png";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-const StaticElectricity = () => {
+export default function StaticElectricity() {
   const [isCharged, setIsCharged] = useState(false);
   const [paperAttracted, setPaperAttracted] = useState(false);
   const [draggedOverHair, setDraggedOverHair] = useState(false);
@@ -71,14 +72,30 @@ const StaticElectricity = () => {
       setQuizResult("❌ Incorrect. Try again!");
     }
   };
+  const navigate = useNavigate();
+    const goBack = () => {
+      if (window.history.length > 1) {
+        navigate(-1); // jaribu kurudi history
+      } else {
+        navigate("/virtual-lab"); // fallback page
+      }
+    }; 
 
   return (
-    <div className="container mt-5 pt-5">
-      {/* 1. Practical Title */}
-      <h2 className="text-center mb-3 text-primary">
-        <strong> Static Electricity: Comb and Paper Experiment </strong>
-      </h2>
+    <div className="container mt-5 pt-3">
+      
+      <div className="d-flex align-items-center mb-4">
+          {/* Back Button */}
+          <button onClick={goBack} className="btn btn-outline-secondary me-3">
+            ⬅
+          </button>
 
+          {/* Title */}
+          <h2 className="mb-0 text-primary">
+            <strong>Static Electricity: Comb and Paper Experiment</strong>
+          </h2>
+        </div>
+      
       {/* 2. Short Hint / Introduction */}
         <div className="alert alert-info w-100">
         💡 <strong>Hint:</strong> This experiment demonstrates how static electricity causes a comb to attract paper pieces after rubbing it against hair.
@@ -121,7 +138,7 @@ const StaticElectricity = () => {
       {/* 4. Simulation Area */}
       <div className="row justify-content-center">
         {/* Hair Zone */}
-        <div className="col-md-4 mb-4">
+        <div className="col-4 mb-4">
           <h5 className="text-center">Hair</h5>
           <div
             onDragOver={(e) => e.preventDefault()}
@@ -143,7 +160,7 @@ const StaticElectricity = () => {
         </div>
 
         {/* Paper Zone */}
-        <div className="col-md-4 mb-4">
+        <div className="col-4 mb-4">
           <h5 className="text-center">Paper Pieces</h5>
           <div
             onDragOver={(e) => e.preventDefault()}
@@ -153,7 +170,7 @@ const StaticElectricity = () => {
               border: "2px dashed #ccc",
               borderRadius: "8px",
               padding: "15px",
-              minHeight: "180px",
+              minHeight: "150px",
               position: "relative",
               textAlign: "center",
             }}
@@ -165,8 +182,8 @@ const StaticElectricity = () => {
                 maxWidth: "50%",
                 ...paperStyle,
                 position: "absolute",
-                left: "42%",
-                top: "30%",
+                left: "33%",
+                top: "28%",
                 zIndex: 1,
               }}
             />
@@ -193,7 +210,7 @@ const StaticElectricity = () => {
         </div>
 
         {/* Comb Tool */}
-        <div className="col-md-3 mb-4">
+        <div className="col-4 mb-4">
           <h5 className="text-center">Comb</h5>
           {!paperAttracted ? (
             <>
@@ -245,64 +262,76 @@ const StaticElectricity = () => {
       </div>
 
       {/* 6. Quiz Section */}
-      {showQuiz && (
-        <div className="mt-5 border p-4 rounded">
-          <h5 className="mb-3">🧠 Quiz: Why does the paper stick to the comb?</h5>
-          <div className="form-check text-start">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="quiz"
-              id="option1"
-              value="Comb has glue"
-              onChange={(e) => setQuizAnswer(e.target.value)}
-            />
-            <label className="form-check-label" htmlFor="option1">
-              The comb has glue on it
-            </label>
-          </div>
-          <div className="form-check text-start">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="quiz"
-              id="option2"
-              value="Paper is magnet"
-              onChange={(e) => setQuizAnswer(e.target.value)}
-            />
-            <label className="form-check-label" htmlFor="option2">
-              The paper is magnetic
-            </label>
-          </div>
-          <div className="form-check text-start">
-            <input
-              className="form-check-input"
-              type="radio"
-              name="quiz"
-              id="option3"
-              value="Electrons transferred to comb"
-              onChange={(e) => setQuizAnswer(e.target.value)}
-            />
-            <label className="form-check-label" htmlFor="option3">
-              Electrons transferred to comb
-            </label>
-          </div>
-          <button
-            className="btn btn-success mt-3"
-            onClick={handleQuizSubmit}
-            disabled={!quizAnswer}
-          >
-            Submit Answer
-          </button>
-          {quizResult && (
-            <div className="mt-3">
-              <strong>{quizResult}</strong>
-            </div>
-          )}
-        </div>
-      )}
+
+      {/* Quiz */}
+  <div className="card w-100 shadow-sm mt-4 mb-3">
+    <div className="card-body text-start">
+      <h5 className="card-title">🧠 Quiz</h5>
+      <p>Why does the paper stick to the comb after rubbing it on your hair?</p>
+
+      <div className="form-check">
+        <input
+          type="radio"
+          name="quiz"
+          id="glue"
+          value="glue"
+          className="form-check-input"
+          checked={quizAnswer === "glue"}
+          onChange={(e) => setQuizAnswer(e.target.value)}
+        />
+        <label className="form-check-label" htmlFor="glue">
+          Because the comb has glue
+        </label>
+      </div>
+
+      <div className="form-check">
+        <input
+          type="radio"
+          name="quiz"
+          id="magnet"
+          value="magnet"
+          className="form-check-input"
+          checked={quizAnswer === "magnet"}
+          onChange={(e) => setQuizAnswer(e.target.value)}
+        />
+        <label className="form-check-label" htmlFor="magnet">
+          Because the paper is magnetic
+        </label>
+      </div>
+
+      <div className="form-check">
+        <input
+          type="radio"
+          name="quiz"
+          id="electrons"
+          value="electrons"
+          className="form-check-input"
+          checked={quizAnswer === "electrons"}
+          onChange={(e) => setQuizAnswer(e.target.value)}
+        />
+        <label className="form-check-label" htmlFor="electrons">
+          Because electrons transferred to the comb
+        </label>
+      </div>
+
+      <button
+        className="btn btn-primary mt-2"
+        onClick={() => {
+          if (quizAnswer === "electrons") {
+            setQuizResult("✅ Correct! Rubbing transfers electrons to the comb, making it attract paper.");
+          } else {
+            setQuizResult("❌ Incorrect. Hint: Think about what happens when you rub the comb.");
+          }
+        }}
+      >
+        Submit
+      </button>
+
+      <div className="mt-2">{quizResult}</div>
+    </div>
+  </div>
+
+
     </div>
   );
 };
-
-export default StaticElectricity;

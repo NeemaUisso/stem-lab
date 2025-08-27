@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 
 import AppNavbar from './components/Navbar';
 import Home from './pages/Home';
@@ -37,6 +40,9 @@ const AppContent = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // detect mobile
+
   const isMainContent =
     location.pathname.startsWith('/virtual-lab') ||
     location.pathname.includes('/subject');
@@ -48,7 +54,7 @@ const AppContent = () => {
 
   return (
     <>
-      <AppNavbar toggleSidebar={toggleSidebar} />
+      <AppNavbar toggleSidebar={toggleSidebar} isMobile={isMobile} />
 
       <div style={{ display: 'flex' }}>
         {isMainContent && <Sidebar open={sidebarOpen} />}
