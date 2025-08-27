@@ -65,8 +65,8 @@ const AppContent = () => {
                 <div style={{ width: '100%' }}>
                   <Home />
                   <div
-                    className="container"
-                    style={{ paddingTop: '40px', paddingBottom: '40px' }}
+                    // className="container"
+                    style={{ paddingTop: '40px', paddingBottom: '40px'}}
                   >
                     <div id="faq">
                       <FAQ />
@@ -74,7 +74,7 @@ const AppContent = () => {
                     <div id="stem-club">
                       <StemClub />
                     </div>
-                    <Footer />
+                      
                   </div>
                 </div>
               }
@@ -119,6 +119,8 @@ const AppContent = () => {
           </Routes>
         </div>
       </div>
+
+      <Footer />
 
       {!hideAsk && <Ask />}
     </>
