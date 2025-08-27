@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import AppNavbar from './components/Navbar';
 import Home from './pages/Home';
 import FAQ from './components/FAQ';
-import StemClub from './components/StemClub';
+import StemClub from './components/Stemclub';
 import Footer from './components/Footer';
 import UploadPracticalForm from './instructorPanel/UploadPracticalForm';
 import Ask from './components/Ask';
@@ -50,10 +50,14 @@ const AppContent = () => {
     <>
       <AppNavbar toggleSidebar={toggleSidebar} />
 
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex' , width: '100%'}}>
         {isMainContent && <Sidebar open={sidebarOpen} />}
 
-        <div style={{ flexGrow: 1 }}>
+        <div style={{ 
+          flexGrow: 1, width: '100%',
+          display: 'flex',
+          justifyContent: isMainContent ? 'flex-start' : 'center',
+          alignItems: 'flex-start', }}>
           <Routes>
             <Route
               path="/"

@@ -1,143 +1,127 @@
-import React, { useState, useRef } from 'react';
-import { Accordion, Button, Alert, Form, Card } from 'react-bootstrap';
+import React, { useState, useRef } from "react";
+import { Accordion, Button, Alert, Form } from "react-bootstrap";
+import water from "../assets/Water.png";
+import buffer from "../assets/buffer-bottle.png";
+import indicator from "../assets/indicator-bottle.png";
+import edta from "../assets/edta-bottle.png";
+import dropperEmpty from "../assets/dropper1.png";
+import dropperFilled from "../assets/dropper2.png";
+import beaker from "../assets/Beaker.png";
 
-// Import images (optimized sizes)
-import bufferBottleImg from '../assets/buffer-bottle.png';
-import indicatorBottleImg from '../assets/indicator-bottle.png';
-import edtaBottleImg from '../assets/edta-bottle.png';
-import waterBottleImg from '../assets/Water.png';
-import emptyDropperImg from '../assets/dropper1.png';
-import filledDropperImg from '../assets/dropper2.png';
-import beakerImg from '../assets/Beaker.png';
+const chemicals = [
+  { id: "water", label: "Water", image: water },
+  { id: "buffer", label: "Buffer", image: buffer },
+  { id: "indicator", label: "Indicator", image: indicator },
+  { id: "edta", label: "EDTA", image: edta },
+];
 
-const HardnessWaterLab = () => {
-  // Experiment state
-  const [step, setStep] = useState(0);
+const MAX_EDTA_DROPS = 8;
+
+export default function HardnessWaterDropper() {
   const [beakerContent, setBeakerContent] = useState({
     water: false,
     buffer: false,
     indicator: false,
-    edtaDrops: 0
+    edtaDrops: 0,
   });
-  const [dropperState, setDropperState] = useState('empty');
-  const [dropperContent, setDropperContent] = useState(null);
-  const [showDropper, setShowDropper] = useState(false);
+
+  const [dropper, setDropper] = useState({ state: "empty", content: null });
   const [dropperPosition, setDropperPosition] = useState({ x: 0, y: 0 });
+  const [showDropper, setShowDropper] = useState(false);
   const [hardness, setHardness] = useState(null);
-  const [quizAnswer, setQuizAnswer] = useState('');
+  const [quizAnswer, setQuizAnswer] = useState(null);
   const [quizSubmitted, setQuizSubmitted] = useState(false);
+  const [draggingChemical, setDraggingChemical] = useState(null);
 
-  // Experiment data
-  const experimentData = {
-    title: "Removing Hardness of Water",
-    hint: "1. Drag water to beaker 2. Take empty dropper 3. Drag to chemicals to fill 4. Add to beaker",
-    steps: [
-      "Drag water sample to the beaker",
-      "Take empty dropper and fill with buffer solution",
-      "Add buffer to beaker",
-      "Take empty dropper and fill with indicator",
-      "Add indicator to beaker",
-      "Take empty dropper and fill with EDTA",
-      "Add EDTA drops until color changes",
-      "Record results"
-    ],
-    quiz: {
-      question: "What causes permanent water hardness?",
-      options: [
-        "Calcium bicarbonate",
-        "Magnesium sulfate",
-        "Sodium chloride",
-        "Potassium nitrate"
-      ],
-      correctAnswer: "Magnesium sulfate"
+  const beakerRef = useRef(null);
+
+  const isSmallScreen = () => window.innerWidth < 768;
+
+  const getWaterHeight = () => {
+    let height = 0;
+    if (beakerContent.water) height += 30;
+    if (beakerContent.buffer) height += 20;
+    if (beakerContent.indicator) height += 20;
+    if (beakerContent.edtaDrops > 0) height += beakerContent.edtaDrops * 3;
+    return Math.min(height, 95);
+  };
+
+  const getSolutionColor = () => {
+    if (!beakerContent.water) return "#4da6ff";
+    if (beakerContent.indicator) {
+      if (beakerContent.edtaDrops < 4) return "#ff4d4d";
+      else if (beakerContent.edtaDrops < 8) return "#ff9999";
+      else return "#4da6ff";
+    }
+    if (beakerContent.buffer) return "#99ccff";
+    return "#4da6ff";
+  };
+
+  const handleChemicalClick = (chem) => {
+    if (chem.id === "water") {
+      setBeakerContent((prev) => ({ ...prev, water: true }));
+    } else {
+      setDropper({ state: "filled", content: chem.id });
+      setShowDropper(true);
     }
   };
 
-  // Handle water drag to beaker
-  const handleWaterDrop = (e) => {
+  const handleDragStart = (chem, e) => {
+    if (isSmallScreen()) return;
+    setDraggingChemical(chem.id);
+    setDropper({ state: chem.id === "water" ? "empty" : "filled", content: chem.id });
+    setShowDropper(true);
+  };
+
+  const handleDragEnd = (e) => {
+    setDraggingChemical(null);
+  };
+
+  const handleBeakerDrop = (e) => {
     e.preventDefault();
-    if (step === 0) {
-      setBeakerContent(prev => ({ ...prev, water: true }));
-      setStep(1);
-    }
-  };
+    if (!dropper.content) return;
 
-  // Handle dropper filling from chemical bottles
-  const handleChemicalPickup = (e, chemical) => {
-    e.preventDefault();
-    const data = e.dataTransfer.getData('text/plain');
-    if (data === 'dropper') {
-      setDropperContent(chemical);
-      setDropperState('filled');
-    }
-  };
+    const chemId = dropper.content;
 
-  // Handle mouse move for dropper
-  const handleMouseMove = (e) => {
-    if (showDropper) {
-      setDropperPosition({
-        x: e.clientX - 20,
-        y: e.clientY - 20
+    if (chemId === "water") setBeakerContent((prev) => ({ ...prev, water: true }));
+    if (chemId === "buffer") setBeakerContent((prev) => ({ ...prev, buffer: true }));
+    if (chemId === "indicator") setBeakerContent((prev) => ({ ...prev, indicator: true }));
+    if (chemId === "edta") {
+      setBeakerContent((prev) => {
+        const newDrops = prev.edtaDrops + 1;
+        if (newDrops >= MAX_EDTA_DROPS) {
+          const hardnessValue = (newDrops * 0.05 * 0.01 * 100 * 1000) / 50;
+          setHardness(hardnessValue.toFixed(2));
+        }
+        return { ...prev, edtaDrops: newDrops };
       });
     }
+
+    setDropper({ state: "empty", content: null });
+    setShowDropper(false);
+    setDraggingChemical(null);
   };
 
-  // Handle drop in beaker
-  const handleChemicalDrop = (e) => {
-    e.preventDefault();
-    if (!dropperContent) return;
+  const handleDragOver = (e) => e.preventDefault();
 
-    if (dropperContent === 'buffer' && step === 1) {
-      setBeakerContent(prev => ({ ...prev, buffer: true }));
-      setStep(2);
-    } else if (dropperContent === 'indicator' && step === 2) {
-      setBeakerContent(prev => ({ ...prev, indicator: true }));
-      setStep(3);
-    } else if (dropperContent === 'edta' && step === 3) {
-      const newDrops = beakerContent.edtaDrops + 1;
-      setBeakerContent(prev => ({ ...prev, edtaDrops: newDrops }));
-      
-      if (newDrops >= 8) {
-        calculateHardness(newDrops);
-      }
+  const handleMouseMove = (e) => {
+    if (showDropper && dropper.state === "filled") {
+      setDropperPosition({ x: e.clientX - 20, y: e.clientY - 20 });
     }
-    
-    setDropperContent(null);
-    setDropperState('empty');
-  };
-
-  // Calculate hardness
-  const calculateHardness = (drops) => {
-    const hardnessValue = (drops * 0.05 * 0.01 * 100 * 1000) / 50;
-    setHardness(hardnessValue.toFixed(2));
-    setStep(4);
-  };
-
-  // Get current solution color (no background, just border color)
-  const getSolutionStyle = () => {
-    if (!beakerContent.water) return { border: 'none' };
-    
-    if (!beakerContent.buffer) {
-      return { border: '2px solid rgba(173, 216, 230, 0.7)' };
-    }
-    if (!beakerContent.indicator) {
-      return { border: '2px solid rgba(173, 216, 230, 0.9)' };
-    }
-    if (beakerContent.edtaDrops < 4) {
-      return { border: '2px solid rgba(255, 107, 107, 0.7)' };
-    }
-    if (beakerContent.edtaDrops < 8) {
-      return { border: '2px solid rgba(255, 185, 185, 0.7)' };
-    }
-    return { border: '2px solid rgba(137, 207, 240, 0.7)' };
   };
 
   return (
-    <div className="container mt-4 pt-5" onMouseMove={handleMouseMove}>
-      <h1 className="text-center text-primary mb-4">{experimentData.title}</h1>
-      
+    <div
+      className="container mt-4 pt-5"
+      onMouseMove={handleMouseMove}
+      style={{ overflowX: isSmallScreen() ? "hidden" : "visible", overflowY: "hidden" }}
+    >
+      <h1 className="text-center text-primary mb-4">Removing Hardness of Water</h1>
+
       <div className="alert alert-info">
-        <strong>💡 Hint:</strong> {experimentData.hint}
+        💡 Hint: {isSmallScreen()
+          ? "Click a chemical or dropper to add it to the beaker."
+          : "Drag chemicals into the beaker to add them."}
       </div>
 
       <Accordion defaultActiveKey="0" className="mb-4">
@@ -145,260 +129,235 @@ const HardnessWaterLab = () => {
           <Accordion.Header>Steps & Procedure</Accordion.Header>
           <Accordion.Body>
             <ol>
-              {experimentData.steps.map((step, index) => (
-                <li key={index}>{step}</li>
-              ))}
+              <li>Add water to the beaker.</li>
+              <li>Add buffer solution.</li>
+              <li>Add indicator solution.</li>
+              <li>Add EDTA until color changes.</li>
+              <li>Record hardness.</li>
             </ol>
           </Accordion.Body>
         </Accordion.Item>
       </Accordion>
 
-      <div className="row">
-        {/* Components Panel */}
-        <div className="col-md-3">
+      <div className="d-flex flex-column flex-sm-row align-items-start gap-3">
+        {/* Components */}
+        <div className="flex-grow-1 text-start">
           <h4>Components</h4>
-          
-          {/* Water Bottle */}
-          <Card 
-            className="mb-3 text-center"
-            draggable={step === 0}
-            onDragStart={(e) => e.dataTransfer.setData('text/plain', 'water')}
-            style={{ 
-              cursor: step === 0 ? 'grab' : 'not-allowed',
-              width: '80px',
-              padding: '5px'
-            }}
-          >
-            <Card.Img variant="top" src={waterBottleImg} style={{ width: '40px', height: '60px', margin: '0 auto' }} />
-            <Card.Body className="p-1">
-              <Card.Text style={{ fontSize: '0.8rem' }}>Water</Card.Text>
-            </Card.Body>
-          </Card>
-          
-          {/* Chemical Bottles - Now accept dropper drops */}
-          {['buffer', 'indicator', 'edta'].map((chemical) => (
-            <Card
-              key={chemical}
-              className="mb-3 text-center"
-              onDrop={(e) => handleChemicalPickup(e, chemical)}
-              onDragOver={(e) => e.preventDefault()}
-              style={{ 
-                width: '80px',
-                padding: '5px',
-                backgroundColor: dropperContent === chemical ? '#f8f9fa' : 'white'
+          <div className="d-flex flex-wrap justify-content-start gap-2">
+            {chemicals.map((chem) => (
+              <div
+                key={chem.id}
+                className="card d-flex align-items-center justify-content-center"
+                style={{
+                  cursor: "grab",
+                  width: "100px",
+                  height: "100px",
+                  flex: "0 0 45%",
+                  border: draggingChemical === chem.id ? "2px solid darkblue" : "1px solid #ccc",
+                  opacity: chem.id === "water" && beakerContent.water ? 0.5 : 1,
+                }}
+                draggable={!isSmallScreen()}
+                onDragStart={(e) => handleDragStart(chem, e)}
+                onDragEnd={handleDragEnd}
+                onClick={() => handleChemicalClick(chem)}
+              >
+                <img
+                  src={chem.image}
+                  alt={chem.label}
+                  style={{ maxHeight: 60, objectFit: "contain" }}
+                />
+                <div style={{ fontSize: "0.8rem" }}>{chem.label}</div>
+              </div>
+            ))}
+
+            {/* Dropper */}
+            <div
+              className="card d-flex align-items-center justify-content-center"
+              style={{
+                cursor: dropper.state === "empty" ? "not-allowed" : "grab",
+                width: "100px",
+                height: "100px",
+                flex: "0 0 45%",
+              }}
+              onClick={() => {
+                if (isSmallScreen() && dropper.state === "filled") {
+                  handleBeakerDrop(new Event("click"));
+                }
               }}
             >
-              <Card.Img 
-                variant="top" 
-                src={
-                  chemical === 'buffer' ? bufferBottleImg :
-                  chemical === 'indicator' ? indicatorBottleImg : edtaBottleImg
-                } 
-                style={{ width: '40px', height: '60px', margin: '0 auto' }} 
+              <img
+                src={dropper.state === "filled" ? dropperFilled : dropperEmpty}
+                alt="Dropper"
+                style={{ maxHeight: 60, objectFit: "contain" }}
               />
-              <Card.Body className="p-1">
-                <Card.Text style={{ fontSize: '0.8rem' }}>
-                  {chemical === 'buffer' ? 'Buffer' : 
-                   chemical === 'indicator' ? 'Indicator' : 'EDTA'}
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          ))}
-          
-          {/* Empty Dropper */}
-          <Card
-            className="mb-3 text-center"
-            draggable={step >= 1}
-            onDragStart={(e) => {
-              e.dataTransfer.setData('text/plain', 'dropper');
-              setShowDropper(true);
-            }}
-            onDragEnd={() => setShowDropper(false)}
-            style={{ 
-              cursor: step >= 1 ? 'grab' : 'not-allowed',
-              width: '80px',
-              padding: '5px'
+              <div style={{ fontSize: "0.8rem" }}>
+                {dropper.state === "filled" ? "Filled Dropper" : "Empty Dropper"}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Beaker */}
+        <div className="col-12 col-md-6 mb-4 d-flex flex-column align-items-center">
+          <h5>Beaker with Water</h5>
+          <div
+            ref={beakerRef}
+            onDrop={handleBeakerDrop}
+            onDragOver={handleDragOver}
+            className="position-relative mx-auto"
+            style={{
+              width: "200px",
+              height: "250px",
+              background: `url(${beaker}) bottom center no-repeat`,
+              backgroundSize: "contain",
+              overflow: "hidden",
+              borderRadius: 20,
+              touchAction: "manipulation",
             }}
           >
-            <Card.Img variant="top" src={emptyDropperImg} style={{ 
-              width: '30px', 
-              height: '50px', 
-              margin: '0 auto',
-              transform: 'rotate(-30deg)'
-            }} />
-            <Card.Body className="p-1">
-              <Card.Text style={{ fontSize: '0.8rem' }}>Dropper</Card.Text>
-            </Card.Body>
-          </Card>
-        </div>
-
-        {/* Beaker Area */}
-      <div className="col-md-6 position-relative">
-        <h4 className="text-center">Beaker</h4>
-        <div 
-          className="border rounded p-4 text-center"
-          onDrop={step === 0 ? handleWaterDrop : handleChemicalDrop}
-          onDragOver={(e) => e.preventDefault()}
-          style={{ height: '350px', background: '#f8f9fa' }}
-        >
-          {/* Beaker with dynamic liquid filling */}
-          <div className="mx-auto" style={{ 
-            width: '120px', 
-            height: '200px', 
-            position: 'relative',
-            overflow: 'hidden'
-          }}>
-            <img src={beakerImg} alt="Beaker" style={{ 
-              width: '100%', 
-              height: '100%', 
-              position: 'relative', 
-              zIndex: 2 
-            }} />
-            
-            {/* Liquid filling visualization */}
-            <div style={{
-              position: 'absolute',
-              bottom: 0,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: '80px',
-              ...getSolutionStyle(),
-              borderRadius: '0 0 40px 40px',
-              zIndex: 1
-            }} />
-          </div>
-            
-            {/* Step instructions */}
-            {step === 0 && <p className="mt-5">Drag water to the beaker to start</p>}
-            {step === 1 && <p className="mt-5">Drag empty dropper to buffer bottle to fill</p>}
-            {step === 2 && <p className="mt-5">Drag empty dropper to indicator bottle to fill</p>}
-            {step === 3 && <p className="mt-5">Drag empty dropper to EDTA bottle to fill</p>}
-            {step === 4 && <p className="mt-5 text-success">Titration complete! Color changed to blue</p>}
+            <div
+              style={{
+                position: "absolute",
+                bottom: 0,
+                left: "50%",
+                transform: "translateX(-50%)",
+                width: "100%",
+                height: `${getWaterHeight()}%`,
+                backgroundColor: getSolutionColor(),
+                opacity: 0.6,
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+                borderBottomLeftRadius: 40,
+                borderBottomRightRadius: 40,
+                transition: "height 0.3s ease, background-color 0.3s ease",
+              }}
+            ></div>
           </div>
         </div>
 
-        {/* Results Panel */}
-        <div className="col-md-3">
-          <Card className="mb-3">
-            <Card.Header>Beaker Contents</Card.Header>
-            <Card.Body>
-              <ul className="list-unstyled">
-                <li>{beakerContent.water ? "✓ Water added" : "✗ No water"}</li>
-                <li>{beakerContent.buffer ? "✓ Buffer added" : "✗ No buffer"}</li>
-                <li>{beakerContent.indicator ? "✓ Indicator added" : "✗ No indicator"}</li>
-                <li>EDTA drops: {beakerContent.edtaDrops}</li>
-              </ul>
-            </Card.Body>
-          </Card>
-          
+        {/* Results */}
+        <div className="text-center flex-grow-1">
+          <div className="card p-2 mb-3">
+            <h5>Beaker Contents</h5>
+            <ul className="list-unstyled">
+              <li>{beakerContent.water ? "✓ Water" : "✗ Water"}</li>
+              <li>{beakerContent.buffer ? "✓ Buffer" : "✗ Buffer"}</li>
+              <li>{beakerContent.indicator ? "✓ Indicator" : "✗ Indicator"}</li>
+              <li>EDTA drops: {beakerContent.edtaDrops}</li>
+            </ul>
+          </div>
+
           {hardness && (
-            <Card className="alert alert-success p-0">
-              <Card.Header>Results</Card.Header>
-              <Card.Body>
-                <p>EDTA Used: {(beakerContent.edtaDrops * 0.05).toFixed(1)} mL</p>
-                <p>Hardness: {hardness} ppm CaCO₃</p>
-                <p>
-                  Water is: <strong>
-                    {hardness < 60 ? "Soft" : 
-                     hardness < 120 ? "Moderately Hard" : 
-                     hardness < 180 ? "Hard" : "Very Hard"}
-                  </strong>
-                </p>
-              </Card.Body>
-            </Card>
+            <div className="alert alert-success">
+              <h5>Results</h5>
+              <p>Hardness: {hardness} ppm CaCO₃</p>
+              <p>
+                Water is:{" "}
+                <strong>
+                  {hardness < 60
+                    ? "Soft"
+                    : hardness < 120
+                    ? "Moderately Hard"
+                    : hardness < 180
+                    ? "Hard"
+                    : "Very Hard"}
+                </strong>
+              </p>
+            </div>
           )}
         </div>
       </div>
 
       {/* Floating Dropper */}
-      {showDropper && (
-        <img 
-          src={dropperState === 'empty' ? emptyDropperImg : filledDropperImg}
-          alt="Dropper"
+      {showDropper && dropper.state === "filled" && (
+        <div
           style={{
-            position: 'fixed',
-            left: `${dropperPosition.x}px`,
-            top: `${dropperPosition.y}px`,
-            width: '40px',
-            height: '80px',
+            position: "fixed",
+            left: dropperPosition.x,
+            top: dropperPosition.y,
+            width: 50,
+            height: 50,
             zIndex: 1000,
-            pointerEvents: 'none',
-            transform: 'rotate(-30deg)'
+            pointerEvents: "auto",
           }}
-        />
+          onClick={() => {
+            if (isSmallScreen() && dropper.content) handleBeakerDrop(new Event("click"));
+          }}
+        >
+          <img
+            src={dropper.content === "water" ? water : dropperFilled}
+            alt="Dropper"
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          />
+        </div>
       )}
 
-      {/* Reset Button */}
+      {/* Reset */}
       <div className="text-center mt-4">
-        <Button variant="outline-danger" onClick={() => {
-          setStep(0);
-          setBeakerContent({
-            water: false,
-            buffer: false,
-            indicator: false,
-            edtaDrops: 0
-          });
-          setHardness(null);
-          setDropperContent(null);
-          setDropperState('empty');
-          setShowDropper(false);
-        }}>
+        <Button
+          variant="outline-danger"
+          onClick={() => {
+            setBeakerContent({
+              water: false,
+              buffer: false,
+              indicator: false,
+              edtaDrops: 0,
+            });
+            setDropper({ state: "empty", content: null });
+            setShowDropper(false);
+            setHardness(null);
+            setQuizAnswer(null);
+            setQuizSubmitted(false);
+          }}
+        >
           Reset Experiment
         </Button>
       </div>
-      
-      {/* Explanation */}
-      <div className="mt-4">
+
+      {/* Scientific Explanation */}
+      <div className="mt-4 p-3 border rounded bg-light">
         <h4>Scientific Explanation</h4>
         <p>
-          This experiment measures water hardness through EDTA titration:
-        </p>
-        <ul>
-          <li>EDTA chelates Ca²⁺ and Mg²⁺ ions</li>
-          <li>Eriochrome Black T indicator changes from red to blue at endpoint</li>
-          <li>Buffer maintains pH 10 for proper reaction</li>
-        </ul>
-        <p>
-          <strong>Calculation:</strong> Hardness (ppm CaCO₃) = (EDTA volume × 0.01M × 100 × 1000) / 50mL
+          This experiment demonstrates how the hardness of water can be determined using EDTA
+          titration. The indicator changes color when calcium and magnesium ions are completely
+          chelated by EDTA. The number of drops required indicates the hardness level in ppm of
+          CaCO₃.
         </p>
       </div>
 
       {/* Quiz */}
       <div className="mt-4 border-top pt-3">
         <h4>Quick Quiz</h4>
-        <p className="fw-bold">{experimentData.quiz.question}</p>
-        
+        <p>What causes permanent water hardness?</p>
         <Form>
-          {experimentData.quiz.options.map((option) => (
-            <Form.Check
-              key={option}
-              type="radio"
-              name="quiz"
-              id={option}
-              label={option}
-              checked={quizAnswer === option}
-              onChange={() => setQuizAnswer(option)}
-              disabled={quizSubmitted}
-              className="mb-2"
-            />
-          ))}
+          {["Calcium bicarbonate", "Magnesium sulfate", "Sodium chloride", "Potassium nitrate"].map(
+            (opt) => (
+              <Form.Check
+                key={opt}
+                type="radio"
+                name="quiz"
+                id={opt}
+                label={opt}
+                checked={quizAnswer === opt}
+                onChange={() => setQuizAnswer(opt)}
+                disabled={quizSubmitted}
+              />
+            )
+          )}
         </Form>
-        
         <Button
-          variant="primary"
+          className="mt-2"
           onClick={() => setQuizSubmitted(true)}
           disabled={!quizAnswer || quizSubmitted}
-          className="mt-2"
         >
           Submit Answer
         </Button>
-
         {quizSubmitted && (
-          <Alert 
-            variant={quizAnswer === experimentData.quiz.correctAnswer ? 'success' : 'danger'}
+          <Alert
+            variant={quizAnswer === "Magnesium sulfate" ? "success" : "danger"}
             className="mt-2"
           >
-            {quizAnswer === experimentData.quiz.correctAnswer
+            {quizAnswer === "Magnesium sulfate"
               ? "Correct! MgSO₄ causes permanent hardness."
               : "Incorrect. The correct answer is Magnesium sulfate."}
           </Alert>
@@ -406,6 +365,4 @@ const HardnessWaterLab = () => {
       </div>
     </div>
   );
-};
-
-export default HardnessWaterLab;
+}
