@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import AppNavbar from './components/Navbar';
 import Home from './pages/Home';
 import FAQ from './components/FAQ';
-import StemClub from './components/StemClub';
+import StemClub from './components/Stemclub';
 import Footer from './components/Footer';
 import UploadPracticalForm from './instructorPanel/UploadPracticalForm';
 import Ask from './components/Ask';
@@ -34,6 +34,7 @@ import AcidBaseTitration from './components/AcidBaseTitration';
 import ClubList from './components/stem-club';
 
 import './App.css';
+import HardnessPractical from './pages/hardnessWater';
 
 const AppContent = () => {
   const location = useLocation();
@@ -56,10 +57,14 @@ const AppContent = () => {
     <>
       <AppNavbar toggleSidebar={toggleSidebar} isMobile={isMobile} />
 
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex' , width: '100%'}}>
         {isMainContent && <Sidebar open={sidebarOpen} />}
 
-        <div style={{ flexGrow: 1 }}>
+        <div style={{ 
+          flexGrow: 1, width: '100%',
+          display: 'flex',
+          justifyContent: isMainContent ? 'flex-start' : 'center',
+          alignItems: 'flex-start', }}>
           <Routes>
             <Route
               path="/"
@@ -76,8 +81,8 @@ const AppContent = () => {
                     <div id="stem-club">
                       <StemClub />
                     </div>
+                    <Footer />
                   </div>
-                  <Footer />
                 </div>
               }
             />

@@ -6,10 +6,17 @@ import chemistryImage from '../assets/chemistry1.png';
 
 const chemistryprojects = [
   {
+<<<<<<< HEAD
     title: "Acid-Base Titration",
     description: "Observe color changes in litmus as pH varies.",
     image: chemistryImage,
     link: "/practicals/AcidBaseTitration",
+=======
+    title: "Hardness of Water",
+    description: "Determine the hardness of water using soap solution.",
+    image: chemistryImage,
+    link: "/chemistry/hardness-of-water",
+>>>>>>> bd19c8f9adeb736d674d7c147b5030f7d126eb5b
   },
   {
     title: "Acid-Base Reaction",
