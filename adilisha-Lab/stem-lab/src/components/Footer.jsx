@@ -30,7 +30,7 @@ const ScrollTop = () => {
         role="presentation"
         sx={{
           position: 'fixed',
-          bottom: 24,
+          bottom: 0,
           right: 24,
           zIndex: 1000,
         }}
@@ -45,7 +45,7 @@ const ScrollTop = () => {
 
 const Footer = () => {
   return (
-    <Box component="footer" sx={{ backgroundColor: '#003366', color: 'white', mt: 6, pt: 4 }}>
+    <Box component="footer" sx={{ backgroundColor: '#003366', color: 'white', mt: 6, pt: 4 , }}>
       <Container maxWidth="lg" sx={{ px: { xs: 2, sm: 4 } }}>
         <Grid container spacing={4} justifyContent="space-between">
           {/* Useful Links */}

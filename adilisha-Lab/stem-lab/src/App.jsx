@@ -49,46 +49,51 @@ const AppContent = () => {
     location.pathname.includes('/subject');
 
   const hideAsk =
-   
     location.pathname === '/signin' ||
     location.pathname === '/sign-up';
 
+  // Define pages where footer should be hidden
+  const hideFooter = 
+    location.pathname === '/signin' ||
+    location.pathname === '/sign-up' ||
+    location.pathname.startsWith('/virtual-lab') ||
+    location.pathname.includes('/subject') ||
+    location.pathname === '/upload-practical';
+
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppNavbar toggleSidebar={toggleSidebar} isMobile={isMobile} />
 
-      <div style={{ display: 'flex' , width: '100%'}}>
+      <div style={{ display: 'flex', flex: 1, width: '100%' }}>
         {isMainContent && <Sidebar open={sidebarOpen} />}
 
         <div style={{ 
-          flexGrow: 1, width: '100%',
+          flexGrow: 1, 
+          width: '100%',
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: isMainContent ? 'flex-start' : 'center',
-          alignItems: 'flex-start', }}>
+          alignItems: 'flex-start',
+        }}>
           <Routes>
             <Route
               path="/"
               element={
-                <div style={{ width: '100%' }}>
+                <div style={{ width: '100%', display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <Home />
-                  <div
-                    className="container"
-                    style={{ paddingTop: '40px', paddingBottom: '40px' }}
-                  >
+                  <div style={{ paddingTop: '40px', paddingBottom: '40px', flex: 1 }}>
                     <div id="faq">
                       <FAQ />
                     </div>
                     <div id="stem-club">
                       <StemClub />
                     </div>
-                    <Footer />
                   </div>
                 </div>
               }
             />
 
             {/* Auth routes */}
-          
             <Route path="/signin" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/competition" element={<AdilishaCompetition />} />
@@ -115,20 +120,21 @@ const AppContent = () => {
                 path="/virtual-lab/practical/:id"
                 element={<ExperimentView />}
               /> 
-              
             </Route>
 
             {/* Instructor access */}
             <Route element={<RoleBasedRoute minimumRole="instructor" />}>
               <Route path="/upload-practical" element={<UploadPracticalForm />} />
-              
             </Route>
           </Routes>
         </div>
       </div>
 
       {!hideAsk && <Ask />}
-    </>
+      
+      {/* Conditionally render footer */}
+      {!hideFooter && <Footer />}
+    </div>
   );
 };
 
