@@ -6,10 +6,10 @@ import chemistryImage from '../assets/chemistry1.png';
 
 const chemistryprojects = [
   {
-    title: "Hardness of Water",
-    description: "Determine the hardness of water using soap solution.",
+    title: "Acid-Base Titration",
+    description: "Observe color changes in litmus as pH varies.",
     image: chemistryImage,
-    link: "/chemistry/hardness-of-water",
+    link: "/practicals/AcidBaseTitration",
   },
   {
     title: "Acid-Base Reaction",
@@ -59,8 +59,8 @@ const hoverStyle = {
 
 const ChemistryProjects = () => {
   return (
-    <div className="container py-5 mt-5">
-      <h2 className="text-center mb-4">Chemistry Practicals</h2>
+    <div className="container py-5 mt-3 mb-3">
+      <h2 className="text-center mb-4" style={{color: '#003366'}}>Chemistry Practicals</h2>
       <div className="row g-4">
         {chemistryprojects.map((project, index) => (
           <div className="col-12 col-sm-6 col-lg-4 d-flex" key={index}>
@@ -83,8 +83,8 @@ const ChemistryProjects = () => {
                     borderTopRightRadius: "1rem",
                   }}
                 />
-                <div className="card-body">
-                  <h5 className="card-title">{project.title}</h5>
+                <div className="card-body" style={{backgroundColor: "#2596be", borderBottomRightRadius: "1rem", borderBottomLeftRadius: "1rem"}}>
+                  <h5 className="card-title text-white">{project.title}</h5>
                   <p className="card-text">{project.description}</p>
                 </div>
               </div>

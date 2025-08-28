@@ -40,21 +40,22 @@ const Ask = () => {
 
   return (
     <>
-      <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 9999 }}>
+      <div style={{ position: 'fixed', bottom: '60px', right: '20px', zIndex: 9999 }}>
         <Button
           aria-describedby={id}
           onClick={handleClick}
           sx={{
             width: '60px',
             height: '60px',
-            borderRadius: '12px',
-            backgroundColor: '#2596be',
+            borderRadius: '50px',
+            backgroundColor: '#003366',
             color: 'white',
             fontWeight: 'bold',
             animation: `${bounce} 1.5s infinite`,
             textTransform: 'none',
             fontSize: '15px',
             padding: 5,
+            
           }}
         >
           Ask a Teacher

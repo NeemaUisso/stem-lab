@@ -129,7 +129,7 @@ export default function SignIn() {
                     required
                   />
                   <i
-                    className={`bi ${showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'} position-absolute top-50 end-0 translate-middle-y me-3 fs-5`}
+                    className={`bi ${showPassword ? 'bi-eye-slash-fill' : 'bi-eye-fill'} position-absolute top-50 bottom-50 end-0 translate-middle-y me-3 fs-5`}
                     onClick={() => setShowPassword(prev => !prev)}
                     style={{ cursor: 'pointer' }}
                     aria-label="Toggle password visibility"

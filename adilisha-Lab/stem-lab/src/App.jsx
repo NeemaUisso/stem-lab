@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 
 import AppNavbar from './components/Navbar';
 import Home from './pages/Home';
@@ -27,6 +30,7 @@ import AviationProjects from './components/AviationProjects';
 import MathematicsProjects from './components/MathematicsProjects';
 import CodingProjects from './components/CodingProjects';
 import LawOfFlotation from './pages/flotation';
+import AcidBaseTitration from './components/AcidBaseTitration';
 import ClubList from './components/stem-club';
 
 import './App.css';
@@ -36,6 +40,9 @@ const AppContent = () => {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // detect mobile
 
   const isMainContent =
     location.pathname.startsWith('/virtual-lab') ||
@@ -55,7 +62,7 @@ const AppContent = () => {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <AppNavbar toggleSidebar={toggleSidebar} />
+      <AppNavbar toggleSidebar={toggleSidebar} isMobile={isMobile} />
 
       <div style={{ display: 'flex', flex: 1, width: '100%' }}>
         {isMainContent && <Sidebar open={sidebarOpen} />}
@@ -103,7 +110,7 @@ const AppContent = () => {
             <Route path="/virtual-lab/mathematics" element={<MathematicsProjects />} />
             <Route path="/virtual-lab/coding" element={<CodingProjects />} />
             <Route path='/physics/law-of-flotation' element={<LawOfFlotation />} />
-            <Route path="/chemistry/hardness-of-water" element={<HardnessPractical />} />
+            <Route path='/practicals/AcidBaseTitration' element={<AcidBaseTitration />} />
 
             {/* Student access */}
             <Route element={<RoleBasedRoute minimumRole="student" />}>

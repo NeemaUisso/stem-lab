@@ -11,7 +11,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import logo from '../assets/logo.png';
 import { useAuth } from './Auth';
 
-const AppNavbar = ({ toggleSidebar }) => {
+const AppNavbar = ({ toggleSidebar, isMobile }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { logout, user } = useAuth(); // We only need 'user' and 'logout' here
@@ -56,7 +56,7 @@ const AppNavbar = ({ toggleSidebar }) => {
     >
       <Toolbar sx={{ px: 2 }}>
         {/* Sidebar toggle for main content pages only */}
-        {isMainContent && (
+        {!isMobile && (
           <IconButton
             edge="start"
             color="inherit"
@@ -113,8 +113,11 @@ const AppNavbar = ({ toggleSidebar }) => {
         <Box sx={{ flexGrow: 1 }} />
 
         {/* Mobile menu toggle - Always display on small screens */}
+
+        
+
         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-          <IconButton onClick={handleMenuOpen} color="inherit">
+          <IconButton onClick={handleMenuOpen} color="inherit" sx={{bgcolor: '#003366'}}>
             <MenuIcon />
           </IconButton>
           <Menu
@@ -127,52 +130,45 @@ const AppNavbar = ({ toggleSidebar }) => {
             <MenuItem component={Link} to="/virtual-lab" onClick={handleMenuClose}>
               Virtual Lab
             </MenuItem>
-            {/* <MenuItem onClick={handleMenuClose}>
-              <a href="#stem-club" style={{ textDecoration: 'none', color: 'inherit' }}>
-                STEM Club
-              </a>
-            </MenuItem> */}
+            
              <MenuItem component={Link} to="/competition" onClick={handleMenuClose}>
             STEM ClUB
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}></MenuItem>
+
             <MenuItem component={Link} to="/competition" onClick={handleMenuClose}>
             COMPETITION
             </MenuItem>
+
             <MenuItem onClick={handleMenuClose}>
               <a href="#faq" style={{ textDecoration: 'none', color: 'inherit' }}>
                 FAQ
               </a>
             </MenuItem>
+
+             {/* Auth menu item */}
+              {user ? (
+                <MenuItem
+                  onClick={() => {
+                    handleLogout();
+                    handleMenuClose();
+                  }}
+                >
+                  Logout
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  component={Link}
+                  to="/signin"
+                  onClick={handleMenuClose}
+                >
+                  Sign In
+                </MenuItem>
+              )}
+
           </Menu>
         </Box>
 
-        {/* Auth section (Sign In / Logout) */}
-        <Box sx={{ ml: 2 }}>
-          {user ? (
-            <Button
-              onClick={handleLogout}
-              variant="outlined"
-              sx={{ color: '#fff', borderColor: '#fff', textTransform: 'none' }}
-            >
-              Logout
-            </Button>
-          ) : (
-            <Button
-              component={Link}
-              to="/signin"
-              variant="contained"
-              sx={{
-                bgcolor: '#003366',
-                color: '#fff',
-                '&:hover': { bgcolor: '#002244' },
-                textTransform: 'none',
-              }}
-            >
-              Sign In
-            </Button>
-          )}
-        </Box>
+        
       </Toolbar>
     </AppBar>
   );

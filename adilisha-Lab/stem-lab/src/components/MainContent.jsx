@@ -11,13 +11,24 @@ import chemistryImage from '../assets/chemistry1.png';
 import staticImg from '../assets/staticImg.png'
 import flotationImage from '../assets/flotation.png';
 
-
 const subjects = [
   'Robotics', 'Aviation', 'Coding', 'Mathematics', 'Biology', 'Physics', 'Chemistry',
 ];
 
 const subjectCards = {
   Robotics: [
+    {
+      image: robotImage,
+      title: 'Line Following Robot',
+      description: 'Build a robot that follows a line using IR sensors.',
+      link: '/practicals/robotics1',
+    },
+    {
+      image: robotImage,
+      title: 'Line Following Robot',
+      description: 'Build a robot that follows a line using IR sensors.',
+      link: '/practicals/robotics1',
+    },
     {
       image: robotImage,
       title: 'Line Following Robot',
@@ -32,8 +43,32 @@ const subjectCards = {
       description: 'Learn how wing shape affects flight distance.',
       link: '/practicals/aviation1',
     },
+    {
+      image: aviationImage,
+      title: 'Paper Plane Aerodynamics',
+      description: 'Learn how wing shape affects flight distance.',
+      link: '/practicals/aviation1',
+    },
+    {
+      image: aviationImage,
+      title: 'Paper Plane Aerodynamics',
+      description: 'Learn how wing shape affects flight distance.',
+      link: '/practicals/aviation1',
+    },
   ],
   Coding: [
+    {
+      image: codeImage,
+      title: 'Simple Calculator App',
+      description: 'Create a calculator using HTML, CSS, and JavaScript.',
+      link: '/practicals/coding1',
+    },
+    {
+      image: codeImage,
+      title: 'Simple Calculator App',
+      description: 'Create a calculator using HTML, CSS, and JavaScript.',
+      link: '/practicals/coding1',
+    },
     {
       image: codeImage,
       title: 'Simple Calculator App',
@@ -48,8 +83,32 @@ const subjectCards = {
       description: 'Explore right-angled triangles using interactive tools.',
       link: '/practicals/mathematics1',
     },
+    {
+      image: mathImage,
+      title: 'Pythagorean Theorem',
+      description: 'Explore right-angled triangles using interactive tools.',
+      link: '/practicals/mathematics1',
+    },
+    {
+      image: mathImage,
+      title: 'Pythagorean Theorem',
+      description: 'Explore right-angled triangles using interactive tools.',
+      link: '/practicals/mathematics1',
+    },
   ],
   Biology: [
+    {
+      image: biologyImage,
+      title: 'Microscope Exploration',
+      description: 'Identify plant and animal cells under a microscope.',
+      link: '/practicals/biology1',
+    },
+    {
+      image: biologyImage,
+      title: 'Microscope Exploration',
+      description: 'Identify plant and animal cells under a microscope.',
+      link: '/practicals/biology1',
+    },
     {
       image: biologyImage,
       title: 'Microscope Exploration',
@@ -76,30 +135,37 @@ const subjectCards = {
       description: 'How salt makes an Egg float.',
       link: '/physics/law-of-flotation',
     },
-    {
-      image: archImage,
-      title: 'Law of Flotation',
-      description: 'Salt, Water and egg Experiment.',
-      link: '/physics/static-electricity',
-    },
+    
   ],
   Chemistry: [
     {
       image: chemistryImage,
       title: 'Acid-Base Reaction',
       description: 'Observe color changes in litmus as pH varies.',
-      link: '/practicals/chemistry1',
+      link: '/practicals/AcidBaseTitration',
+    },
+    {
+      image: chemistryImage,
+      title: 'Acid-Base Reaction',
+      description: 'Observe color changes in litmus as pH varies.',
+      link: '/practicals/AcidBaseTitration',
+    },
+    {
+      image: chemistryImage,
+      title: 'Acid-Base Reaction',
+      description: 'Observe color changes in litmus as pH varies.',
+      link: '/practicals/AcidBaseTitration',
     },
   ],
 };
 
 const MainContent = () => {
   return (
-    <div className="flex-grow-1 pt-5">
+    <div className="pt-5">
       <div className="container py-4">
         {subjects.map((subject, idx) => (
           <div key={idx} className="mb-5">
-            <h4 className="mb-3 fw-bold text-primary">{subject}</h4>
+            <h4 className="mb-3 fw-bold" style={{color: '#003366'}}>{subject}</h4>
 
             {/* Desktop Carousel */}
             {subjectCards[subject].length > 0 && (
@@ -123,19 +189,25 @@ const MainContent = () => {
                             <div className="col-lg-4" key={imgIdx}>
                               <Link
                                 to={card.link}
-                                className="text-decoration-none text-dark"
+                                className="text-decoration-none text-light"
                               >
-                                <div className="card h-100 shadow rounded border-0 transition hover-shadow">
+                                <div className="card h-100 border-0 transition hover-shadow">
                                   <img
                                     src={card.image}
                                     className="card-img-top rounded-top"
                                     alt={card.title}
+                                    style={{
+                                    height: "220px",
+                                    objectFit: "cover",
+                                    borderTopLeftRadius: "1rem",
+                                    borderTopRightRadius: "1rem",
+                                  }}
                                   />
-                                  <div className="card-body">
-                                    <h5 className="card-title fw-semibold">
+                                  <div className="card-body" style={{backgroundColor: "#2596be", borderBottomRightRadius: "1rem", borderBottomLeftRadius: "1rem"}}>
+                                    <h5 className="card-title fw-bold text-light">
                                       {card.title}
                                     </h5>
-                                    <p className="card-text text-muted small">
+                                    <p className="card-text text-muted small text-light">
                                       {card.description}
                                     </p>
                                   </div>
@@ -186,19 +258,25 @@ const MainContent = () => {
                     >
                       <Link
                         to={card.link}
-                        className="text-decoration-none text-dark"
+                        className="text-decoration-none text-light"
                       >
                         <div className="card shadow rounded border-0">
                           <img
                             src={card.image}
                             className="card-img-top rounded-top"
                             alt={card.title}
+                            style={{
+                            height: "220px",
+                            objectFit: "cover",
+                            borderTopLeftRadius: "1rem",
+                            borderTopRightRadius: "1rem",
+                          }}
                           />
-                          <div className="card-body">
-                            <h5 className="card-title fw-semibold">
+                          <div className="card-body" style={{backgroundColor: "#2596be", borderBottomRightRadius: "1rem", borderBottomLeftRadius: "1rem"}}>
+                            <h5 className="card-title fw-bold text-light">
                               {card.title}
                             </h5>
-                            <p className="card-text text-muted small">
+                            <p className="card-text text-muted small text-light">
                               {card.description}
                             </p>
                           </div>

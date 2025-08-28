@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import stoneImg from "../assets/stone.png";
 import woodImg from "../assets/wood.png";
 import bottleImg from "../assets/bottle.png";
@@ -69,10 +70,29 @@ export default function ArchimedesSimulation() {
       setQuizFeedback("❌ Try again! Hint: Think about how heavy the object is compared to water.");
     }
   };
+  const navigate = useNavigate();
+  const goBack = () => {
+  if (window.history.length > 1) {
+    navigate(-1); // jaribu kurudi history
+  } else {
+    navigate("/virtual-lab"); // au route yako ya main lab page
+  }
+};
 
   return (
-    <div className="container my-5 mt-5 pt-5 d-flex flex-column align-items-center justify-content-center text-center">
-      <h2 className="mb-4 text-primary"><strong>Archimedes' Principle Interactive Simulation</strong></h2>
+    <div className="container my-5 mt-5 pt-3 d-flex flex-column align-items-center justify-content-center text-center">
+
+        <div className="d-flex align-items-center mb-4">
+          {/* Back Button */}
+          <button onClick={goBack} className="btn btn-outline-secondary me-3">
+            ⬅
+          </button>
+
+          {/* Title */}
+          <h2 className="mb-0 text-primary">
+            <strong>Archimedes' Principle Interactive Simulation</strong>
+          </h2>
+        </div>
 
       {/* Hint */}
       <div className="alert alert-info w-100"
@@ -121,8 +141,8 @@ export default function ArchimedesSimulation() {
 
       <div className="row w-100">
         {/* Objects */}
-        <div className="col-md-3 mb-4">
-          <h5>Drag or Tap an Object</h5>
+        <div className="col-4 mb-4">
+          <h5 className="text-primary">Drag or Tap an Object</h5>
           <div className="d-flex flex-column gap-3">
             {objects.map((obj) => (
               <img
@@ -145,15 +165,15 @@ export default function ArchimedesSimulation() {
         </div>
 
         {/* Beaker */}
-        <div className="col-md-6 mb-4 d-flex flex-column align-items-center">
+        <div className="col-4 mb-4 pt-5 d-flex flex-column align-items-center">
           <h5>Beaker with Water</h5>
           <div
-            className="position-relative"
+            className="position-relative beaker-container"
             onDrop={onDrop}
             onDragOver={onDragOver}
             style={{
-              width: "250px",
-              height: "300px",
+              width: "200px",
+              height: "200px",
               backgroundImage: `url(${beakerImg})`,
               backgroundSize: "contain",
               backgroundRepeat: "no-repeat",
@@ -161,19 +181,34 @@ export default function ArchimedesSimulation() {
               position: "relative",
             }}
           >
+            <style>
+              {`
+              @media (max-width: 576px) {
+                  .beaker-container {
+                    width: 140px !important;
+                    height: 140px !important;
+                  }
+                  .object-img {
+                    height: 60px !important;
+                  }
+                }
+
+              `}
+            </style>
             {/* Water Level */}
             <div
               style={{
                 position: "absolute",
                 bottom: "0",
-                left: "0",
-                width: "100%",
+                left: "10%",
+                right: "0",
+                width: "80%",
                 height: `${waterLevel}%`,
                 backgroundColor: "#0d6efd",
                 opacity: 0.5,
                 transition: "height 0.5s ease",
-                borderBottomLeftRadius: "50% 15%",
-                borderBottomRightRadius: "50% 15%",
+                borderBottomLeftRadius: "20% 20%",
+                borderBottomRightRadius: "20% 20%",
               }}
             ></div>
 
@@ -196,7 +231,7 @@ export default function ArchimedesSimulation() {
         </div>
 
         {/* Result */}
-        <div className="col-md-3 mb-4">
+        <div className="col-4 pt-5">
           <h5>Result</h5>
           <div className="border rounded p-3 bg-light shadow-sm" style={{ minHeight: "120px" }}>
             {result || "Drop an object to see what happens."}

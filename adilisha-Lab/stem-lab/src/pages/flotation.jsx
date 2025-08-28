@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import egg from '../assets/Egg.png';
 import Water from '../assets/Water.png';
 import Salt from '../assets/Salt.png';
@@ -90,15 +91,32 @@ export default function FlotationBootstrap() {
     }
   };
 
+  const navigate = useNavigate();
+      const goBack = () => {
+        if (window.history.length > 1) {
+          navigate(-1); // jaribu kurudi history
+        } else {
+          navigate("/virtual-lab"); // fallback page
+        }
+      }; 
+
   return (
-    <div className="container my-5 pt-5 d-flex flex-column align-items-center justify-content-center text-center">
-      <h3 className="text-primary mb-4" style={{ color: "#003366" }}>
-        Demonstrating the <strong>Law of Flotation</strong> Using an Egg, Salt, and Water
-      </h3>
+    <div className="container my-5 pt-3 d-flex flex-column align-items-center justify-content-center text-center">
+      <div className="d-flex align-items-center mb-4">
+          {/* Back Button */}
+          <button onClick={goBack} className="btn btn-outline-secondary me-3">
+            ⬅
+          </button>
+
+          {/* Title */}
+          <h2 className="mb-0 text-primary text-start">
+            Demonstrating the <strong>Law of Flotation</strong> Using an Egg, Salt, and Water
+          </h2>
+        </div>
 
       {/* Hint */}
       <div
-        className="alert alert-info w-100"
+        className="alert alert-info w-100 text-start"
         style={{
           border: "1px solid #b3d9e8",
           borderRadius: 6,
@@ -178,8 +196,8 @@ export default function FlotationBootstrap() {
             onDragOver={handleDragOver}
             className="position-relative mx-auto"
             style={{
-              width: "250px",
-              height: "300px",
+              width: "150px",
+              height: "150px",
               background: `url(${beaker}) bottom center no-repeat`,
               backgroundSize: "contain",
               overflow: "hidden",
@@ -194,14 +212,14 @@ export default function FlotationBootstrap() {
                 bottom: 0,
                 left: "50%",
                 transform: "translateX(-50%)",
-                width: "90%",
+                width: "80%",
                 height: `${(water / MAX_WATER) * 100}%`,
                 backgroundColor: "#42a5f5",
                 opacity: 0.6,
                 borderTopLeftRadius: 10,
                 borderTopRightRadius: 10,
-                borderBottomLeftRadius: 40,
-                borderBottomRightRadius: 40,
+                borderBottomLeftRadius: 30,
+                borderBottomRightRadius: 30,
                 transition: "height 0.3s ease",
               }}
             ></div>
@@ -274,8 +292,8 @@ export default function FlotationBootstrap() {
 
       {/* Explanation */}
       <div className="card my-4 w-100 shadow-sm" style={{ backgroundColor: "#f9f9f9" }}>
-        <h5 className="card-title">🧬 Explanation</h5>
-        <p>
+        <h5 className="card-title text-start ms-2">🧬 Explanation</h5>
+        <p className="text-start ms-2">
           This experiment demonstrates the <b>Law of Flotation</b>, which states that an object will
           float if its density is less than the density of the fluid it is placed in. By adding salt
           to water, we increase the water’s density. Once the water’s density becomes greater than
