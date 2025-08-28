@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Accordion, Button, Alert, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import water from "../assets/Water.png";
 import buffer from "../assets/buffer-bottle.png";
 import indicator from "../assets/indicator-bottle.png";
@@ -10,7 +11,7 @@ import beaker from "../assets/Beaker.png";
 
 const MAX_EDTA_DROPS = 8;
 
-export default function HardnessWaterDropper() {
+export default function HardnessWater() {
   const [beakerContent, setBeakerContent] = useState({ water: false, buffer: false, indicator: false, edtaDrops: 0 });
   const [dropper, setDropper] = useState({ state: "empty", content: null });
   const [dropperPosition, setDropperPosition] = useState({ x: 0, y: 0 });
@@ -113,9 +114,30 @@ export default function HardnessWaterDropper() {
     cursor: "grab",
   };
 
+  const navigate = useNavigate();
+        const goBack = () => {
+          if (window.history.length > 1) {
+            navigate(-1); // jaribu kurudi history
+          } else {
+            navigate("/virtual-lab"); // fallback page
+          }
+        };
+
   return (
-    <div className="container mt-4 pt-5" onMouseMove={handleMouseMove}>
-      <h1 className="text-center text-primary mb-4">Removing Hardness of Water</h1>
+    <div className="container mt-4 pt-5 mb-3" onMouseMove={handleMouseMove}>
+
+      <div className="d-flex align-items-center mb-4">
+          {/* Back Button */}
+          <button onClick={goBack} className="btn btn-outline-secondary me-3">
+            ⬅
+          </button>
+
+          {/* Title */}
+          <h2 className="mb-0 text-primary fs-3">
+           <strong>Removing Hardness of Water</strong>
+          </h2>
+        </div>
+
       <div className="alert alert-info">💡 Hint: {isSmallScreen ? "Click a chemical or dropper to add it to the beaker." : "Drag chemicals into the beaker to add them."}</div>
       <Accordion defaultActiveKey="0" className="mb-4">
         <Accordion.Item eventKey="0">

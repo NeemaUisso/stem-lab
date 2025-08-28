@@ -6,10 +6,10 @@ import mathImage from '../assets/math1.png';
 
 const mathematicsprojects = [
   {
-    title: "Pythagorean Theorem",
+    title: "MATH PLAYGROUND",
     description: "Explore right-angled triangles using interactive tools.",
     image: mathImage,
-    link: "/practicals/mathematics1",
+    link: "/practicals/math-playground",
   },
   {
     title: "Pythagorean Theorem",

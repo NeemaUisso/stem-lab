@@ -12,10 +12,10 @@ const chemistryprojects = [
     link: "/practicals/AcidBaseTitration",
   },
   {
-    title: "Acid-Base Reaction",
+    title: "Removing Hardness of Water",
     description: "Observe color changes in litmus as pH varies.",
     image: chemistryImage,
-    link: "/practicals/chemistry1",
+    link: "/practicals/hardnessWater",
   },
   {
     title: "Acid-Base Reaction",

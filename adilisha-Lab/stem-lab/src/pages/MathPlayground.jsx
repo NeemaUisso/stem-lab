@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Typography, Grid, Button, TextField } from '@mui/material';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Swing from "../assets/Image/swing1.png";
 import Slide from "../assets/Image/slide.png";
 import Bench from "../assets/Image/bench1.png";
@@ -20,176 +20,180 @@ const tools = [
 
 const Playground = () => {
   const [placedItems, setPlacedItems] = useState([]);
-  const [studentTotal, setStudentTotal] = useState('');
-  const [feedback, setFeedback] = useState('');
+  const [studentTotal, setStudentTotal] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [draggingItem, setDraggingItem] = useState(null);
 
+  const navigate = useNavigate();
+  const goBack = () => {
+    if (window.history.length > 1) navigate(-1);
+    else navigate("/virtual-lab");
+  };
+
+  // Desktop drag start
   const handleDragStart = (event, tool) => {
-    event.dataTransfer.setData('tool', JSON.stringify(tool));
+    event.dataTransfer.setData("tool", JSON.stringify(tool));
+  };
+
+  // Mobile touch start
+  const handleTouchStart = (event, tool) => {
+    setDraggingItem(tool);
+  };
+
+  // Mobile touch move
+  const handleTouchMove = (event) => {
+    event.preventDefault(); // avoid scrolling
+  };
+
+  // Mobile touch end
+  const handleTouchEnd = (event, playgroundRef) => {
+    if (!draggingItem || !playgroundRef.current) return;
+
+    const rect = playgroundRef.current.getBoundingClientRect();
+    const touch = event.changedTouches[0];
+    const x = touch.clientX - rect.left;
+    const y = touch.clientY - rect.top;
+
+    setPlacedItems([...placedItems, { ...draggingItem, x, y, id: Date.now() }]);
+    setDraggingItem(null);
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
-    const tool = JSON.parse(event.dataTransfer.getData('tool'));
+    let tool;
+    if (event.dataTransfer.getData("tool")) {
+      tool = JSON.parse(event.dataTransfer.getData("tool"));
+    }
+    if (!tool) return;
     const rect = event.currentTarget.getBoundingClientRect();
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
-
     setPlacedItems([...placedItems, { ...tool, x, y, id: Date.now() }]);
   };
 
-  const handleDragOver = (event) => {
-    event.preventDefault();
-  };
-
-  const handleDelete = (id) => {
-    setPlacedItems(placedItems.filter(item => item.id !== id));
-  };
+  const handleDragOver = (event) => event.preventDefault();
 
   const handleRightClick = (event, id) => {
     event.preventDefault();
-    handleDelete(id);
+    setPlacedItems(placedItems.filter((item) => item.id !== id));
   };
 
   const handleReset = () => {
     setPlacedItems([]);
-    setStudentTotal('');
-    setFeedback('');
+    setStudentTotal("");
+    setFeedback("");
   };
 
   const handleCheck = () => {
     const correctTotal = placedItems.reduce((sum, item) => sum + item.cost, 0);
     const userAnswer = parseInt(studentTotal, 10);
-
-    if (userAnswer === correctTotal) {
-      setFeedback('✅ Correct! Great job!');
-    } else {
-      setFeedback('❌ Incorrect. Try recalculating the costs carefully.');
-    }
+    if (userAnswer === correctTotal)
+      setFeedback("✅ Correct! Great job!");
+    else
+      setFeedback("❌ Incorrect. Try recalculating the costs carefully.");
   };
 
+  const playgroundRef = React.useRef(null);
+
   return (
-    <Box sx={{ p: 2, mt: 8}}>
-      <Typography variant="h3" align="center" gutterBottom fontWeight="bold" color="primary">
-        MATH PLAYGROUND
-      </Typography>
+    <div className="container mt-5 pt-3">
+      <div className="d-flex align-items-center justify-content-center mb-3">
+        <button onClick={goBack} className="btn btn-outline-secondary me-3">
+          ⬅
+        </button>
+        <h2 className="text-center fw-bold text-primary">MATH PLAYGROUND</h2>
+      </div>
 
-      <Typography variant="h5" gutterBottom align="center">
-        🧰 Drag Items to Design Your Playground
-      </Typography>
+      <p className="text-center">🧰 Drag Items to Design Your Playground</p>
 
-      {/* Tools Panel */}
-      <Grid container spacing={2} justifyContent="center" sx={{ mb: 3 }}>
+      {/* Tools */}
+      <div className="d-flex flex-row flex-nowrap overflow-auto mb-4 p-2 border rounded bg-light justify-content-center">
         {tools.map((tool) => (
-          <Grid item xs={4} sm={3} md={2} key={tool.name} sx={{ textAlign: 'center' }}>
+          <div key={tool.name} className="text-center me-3">
             <img
               src={tool.img}
               alt={tool.name}
               draggable
               onDragStart={(e) => handleDragStart(e, tool)}
+              onTouchStart={(e) => handleTouchStart(e, tool)}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={(e) => handleTouchEnd(e, playgroundRef)}
               style={{
-                width: '60px',
-                height: '60px',
-                objectFit: 'contain',
-                cursor: 'grab',
+                width: "60px",
+                height: "60px",
+                objectFit: "contain",
+                cursor: "grab",
               }}
             />
-            <Typography variant="caption" display="block">
-              {tool.name} (${tool.cost})
-            </Typography>
-          </Grid>
+            <small className="d-block">{tool.name} (${tool.cost})</small>
+          </div>
         ))}
-      </Grid>
+      </div>
 
-      <Grid container  justifyContent="center">
-      <Grid container spacing={3}>
-        {/* Playground Area (Left) */}
-        <Grid item xs={12} md={6}>
-          <Typography variant="h6" gutterBottom>
-            🎨 Playground Area (Right-click to delete)
-          </Typography>
-
-          <Box
+      <div className="row">
+        {/* Playground Area */}
+        <div className="col-md-6 mb-3">
+          <h5>🎨 Playground Area (Right-click to delete)</h5>
+          <div
+            ref={playgroundRef}
             onDrop={handleDrop}
             onDragOver={handleDragOver}
-            sx={{
-              width: '100%',
-              height: 400,
-              border: '3px dashed #1976d2',
-              borderRadius: 2,
-              position: 'relative',
-              backgroundColor: '#e3f2fd',
-              mb: 2,
-            }}
+            className="border border-primary border-3 rounded position-relative"
+            style={{ width: "100%", height: "300px", backgroundColor: "#e3f2fd" }}
           >
             {placedItems.map((item) => (
-              <Box
+              <div
                 key={item.id}
                 onContextMenu={(e) => handleRightClick(e, item.id)}
-                sx={{
-                  position: 'absolute',
+                className="position-absolute text-center"
+                style={{
                   left: item.x,
                   top: item.y,
-                  transform: 'translate(-50%, -50%)',
-                  textAlign: 'center',
+                  transform: "translate(-50%, -50%)",
                 }}
               >
-                <img src={item.img} alt={item.name} style={{ width: 50 }} />
-              </Box>
+                <img src={item.img} alt={item.name} style={{ width: "50px" }} />
+              </div>
             ))}
-          </Box>
+          </div>
+        </div>
 
-          <Button variant="outlined" color="error" onClick={handleReset}>
-            Reset Playground
-          </Button>
-        </Grid>
-
-        {/* Calculation Area (Right) */}
-        <Grid item xs={12} md={6}>
-          <Typography variant="h6" gutterBottom>🧮 Your Calculation Area</Typography>
-
-          <Box sx={{ backgroundColor: '#f5f5f5', borderRadius: 2, p: 2 }}>
+        {/* Calculation Area */}
+        <div className="col-md-6 mb-3">
+          <h5>🧮 Your Calculation Area</h5>
+          <div className="bg-light rounded p-3">
             {placedItems.length === 0 ? (
-              <Typography>No items added yet.</Typography>
+              <p>No items added yet.</p>
             ) : (
-              <>
-                <ul>
-                  {placedItems.map((item, index) => (
-                    <li key={index}>{item.name} - ${item.cost}</li>
-                  ))}
-                </ul>
-              </>
+              <ul>
+                {placedItems.map((item, index) => (
+                  <li key={index}>
+                    {item.name} - ${item.cost}
+                  </li>
+                ))}
+              </ul>
             )}
-
-            <TextField
-              label="Your calculated total ($)"
-              variant="outlined"
+            <input
               type="number"
-              fullWidth
+              className="form-control mt-2"
+              placeholder="Your calculated total ($)"
               value={studentTotal}
               onChange={(e) => setStudentTotal(e.target.value)}
-              sx={{ mt: 2 }}
             />
-
-            <Button
-              variant="contained"
-              color="primary"
+            <button
+              className="btn btn-primary mt-2"
               onClick={handleCheck}
-              sx={{ mt: 2 }}
               disabled={placedItems.length === 0}
             >
               Check My Answer
-            </Button>
-
-            {feedback && (
-              <Typography sx={{ mt: 2, fontWeight: 'bold', color: feedback.includes('Correct') ? 'green' : 'red' }}>
-                {feedback}
-              </Typography>
-            )}
-          </Box>
-        </Grid>
-        </Grid>
-      </Grid>
-    </Box>
+            </button>
+          </div>
+          <button className="btn btn-outline-danger mt-2" onClick={handleReset}>
+            Reset Playground
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 

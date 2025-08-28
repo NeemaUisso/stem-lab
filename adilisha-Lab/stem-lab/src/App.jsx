@@ -32,9 +32,10 @@ import CodingProjects from './components/CodingProjects';
 import LawOfFlotation from './pages/flotation';
 import AcidBaseTitration from './components/AcidBaseTitration';
 import ClubList from './components/stem-club';
+import HardnessWater from './pages/hardnessWater';
 
 import './App.css';
-import HardnessPractical from './pages/hardnessWater';
+
 
 const AppContent = () => {
   const location = useLocation();
@@ -57,6 +58,7 @@ const AppContent = () => {
     location.pathname === '/signin' ||
     location.pathname === '/sign-up' ||
     location.pathname.startsWith('/virtual-lab') ||
+    location.pathname.startsWith('/practicals') ||
     location.pathname.includes('/subject') ||
     location.pathname === '/upload-practical';
 
@@ -97,7 +99,7 @@ const AppContent = () => {
             <Route path="/signin" element={<SignIn />} />
             <Route path="/sign-up" element={<SignUp />} />
             <Route path="/competition" element={<AdilishaCompetition />} />
-            <Route path='/math-playground' element={<MathPlayground />} />
+            <Route path='/practicals/math-playground' element={<MathPlayground />} />
             <Route path="/mashindano-form" element={<MashindanoForm />} />
             <Route path="/physics/archimedes-principle" element={<ArchimedesSimulation />} />
             <Route path='/club-list' element={<ClubList/>}/>
@@ -111,6 +113,8 @@ const AppContent = () => {
             <Route path="/virtual-lab/coding" element={<CodingProjects />} />
             <Route path='/physics/law-of-flotation' element={<LawOfFlotation />} />
             <Route path='/practicals/AcidBaseTitration' element={<AcidBaseTitration />} />
+            <Route path='/practicals/hardnessWater' element={<HardnessWater />} />
+
 
             {/* Student access */}
             <Route element={<RoleBasedRoute minimumRole="student" />}>
