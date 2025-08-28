@@ -48,7 +48,7 @@ const Ask = () => {
             width: '60px',
             height: '60px',
             borderRadius: '50px',
-            backgroundColor: '#003366',
+            backgroundColor: '#2596be',
             color: 'white',
             fontWeight: 'bold',
             animation: `${bounce} 1.5s infinite`,
@@ -69,7 +69,7 @@ const Ask = () => {
         onClose={handleClose}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         transformOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-        PaperProps={{
+        paperprops={{
           sx: {
             p: 2,
             maxWidth: 300,
